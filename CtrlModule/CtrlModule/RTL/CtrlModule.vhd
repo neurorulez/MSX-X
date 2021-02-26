@@ -11,7 +11,7 @@ use work.zpupkg.ALL;
 
 entity data_io is
 	generic (
-		sysclk_frequency : integer := 640 --500 -- Sysclk frequency * 10 
+		sysclk_frequency : integer := 850 --500 -- Sysclk frequency * 10 
 	);
 	port (
 		clk 			: in std_logic;
@@ -588,7 +588,7 @@ status(1)<=host_scandoubler_disable;
 status(31 downto 2)<=dipswitches(31 downto 2);
 
 
-debug <= '1' when ioctl_index = X"04" else '0';
+debug <= host_scandoubler_disable; --'1' when ioctl_index = X"04" else '0';
 
 ioctl_index <= X"00" when host_loadrom = '1' else
                X"01" when extension(23 downto 0)  = x"545244" else --DISK   - trd (Beta 128 Interface)

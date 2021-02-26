@@ -327,14 +327,14 @@ int main(int argc,char **argv)
 //	}
 //	OSD_Puts("Initializing SD card\n");
 
-	if(!FindDrive())
-		return(0);
+//	if(!FindDrive())
+//		return(0);
 
 	//OSD_Puts("Loading initial ROM...\n");
 	//LoadROM("SPECTRUMDAT");
-	FileSelector_SetLoadFunction(LoadMED);
+//	FileSelector_SetLoadFunction(LoadMED);
 	Menu_Set(topmenu);
-	Menu_Hide();//oculta el menu por defecto al cargar el core.
+//	Menu_Hide();//oculta el menu por defecto al cargar el core.
 	//Menu_Show(); //muestra el menu por defecto al cargar el core.
 
 	while(1)

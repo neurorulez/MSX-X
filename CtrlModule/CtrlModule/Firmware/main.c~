@@ -98,80 +98,81 @@ static char *st_scanlines[]=
 	"Scanlines CRT 75%"
 };
 
-static char *st_video[]=
+static char *st_blend[]=
 {
-	"ULA-48",
-	"ULA-128",
-	"Pentagon"
+	"Blend off",
+	"Blend on"
 };
 
-static char *st_memory[]=
+static char *st_cpu[]=
 {
-	"Spectrum 128K",
-	"Pentagon 1024K",
-	"Profi 1024K",
-	"Spectrum 48K",
-	"Spectrum +2A/+3"
+	"CPU Clock Normal",
+	"CPU Clock Turbo"
 };
 
-static char *st_joy1[]=
+static char *st_slot1[]=
 {
-	"Joy 1: Sinclair I",
-	"Joy 1: Sinclair II",
-	"Joy 1: Kemston",
-	"Joy 1: Cursor"
+	"Slot 1: MegaSCC+ 1MB",
+	"Slot 1: Empty"
+};
+static char *st_slot2[]=
+{
+	"Slot 1: MegaSCC+ 2MB",
+	"Slot 1: Empty"
+	"Slot 1: Megaram 2MB",
+	"Slot 1: Megaram 1MB"
 };
 
-static char *st_joy2[]=
+static char *st_ram[]=
 {
-	"Joy 2: Sinclair I",
-	"Joy 2: Sinclair II",
-	"Joy 2: Kemston",
-	"Joy 2: Cursor"
+	"Ram 2048KB",
+	"Ram 4096KB"
 };
 
-static char *st_fasttape[]=
+static char *st_slot0[]=
 {
-	"Carga de Cinta Rapida",
-	"Carga de Cinta Normal"
+	"Slot 0: Expanded",
+	"Slot 0: Primary"
 };
 
-static char *st_feat[]=
+static char *st_opl3[]=
 {
-	"Ula+ & Timex",
-	"Normal"
+	"OPL3 Sound Yes",
+	"OPL3 Sound No"
 };
 
-static char *st_mmc[]=
+static char *st_tapsnd[]=
 {
-	"MMC Card off",
-	"divMMC",
-	"ZXMMC"
+	"Tape Sound No",
+	"Tape Sound Yes"
 };
 
-static char *st_gsnd[]=
+static char *st_keymap[]=
 {
-	"General Sound 2MB",
-	"General Sound Desactivado"
+	"Keymap ES",
+	"Keymap EN",
+	"Keymap BR",
+	"Keymap FR"
 };
+
 
 // Our toplevel menu
 static struct menu_entry topmenu[]=
 {
 //      NUMERO MAXIMO DE LINEAS EN MENU SON 16 (PARA MAS HACER SUBMENUS)
-//	{MENU_ENTRY_CALLBACK,"   =SPECTRUM=   ",0},
-//	{MENU_ENTRY_CALLBACK,"                ",0},
+	{MENU_ENTRY_CALLBACK,"  =  MSX-X   =   ",0},
+	{MENU_ENTRY_CALLBACK,"   NeuroRulez  ",0},
 	{MENU_ENTRY_CALLBACK,"Reset",MENU_ACTION(&Reset)},
 	{MENU_ENTRY_CYCLE,(char *)st_scanlines,MENU_ACTION(4)}, 
-	{MENU_ENTRY_CYCLE,(char *)st_joy1,MENU_ACTION(5)}, 
-	{MENU_ENTRY_CYCLE,(char *)st_joy2,MENU_ACTION(5)}, 
-	{MENU_ENTRY_CYCLE,(char *)st_mmc,MENU_ACTION(3)}, 
-	{MENU_ENTRY_CYCLE,(char *)st_gsnd,MENU_ACTION(2)}, 
-	{MENU_ENTRY_CYCLE,(char *)st_feat,MENU_ACTION(2)}, 
-	{MENU_ENTRY_CYCLE,(char *)st_video,MENU_ACTION(3)}, 
-	{MENU_ENTRY_CYCLE,(char *)st_memory,MENU_ACTION(5)},
-	{MENU_ENTRY_CYCLE,(char *)st_fasttape,MENU_ACTION(2)},
-	{MENU_ENTRY_CALLBACK,"Cargar Disco/Cinta \x10",MENU_ACTION(&FileSelector_Show)},
+	{MENU_ENTRY_CYCLE,(char *)st_blend,MENU_ACTION(2)}, 
+	{MENU_ENTRY_CYCLE,(char *)st_cpu,MENU_ACTION(2)}, 
+	{MENU_ENTRY_CYCLE,(char *)st_slot0,MENU_ACTION(2)}, 
+	{MENU_ENTRY_CYCLE,(char *)st_slot1,MENU_ACTION(2)}, 
+	{MENU_ENTRY_CYCLE,(char *)st_slot2,MENU_ACTION(4)}, 
+	{MENU_ENTRY_CYCLE,(char *)st_ram,MENU_ACTION(2)}, 
+	{MENU_ENTRY_CYCLE,(char *)st_opl3,MENU_ACTION(2)},
+	{MENU_ENTRY_CYCLE,(char *)st_keymap,MENU_ACTION(4)},
+//	{MENU_ENTRY_CALLBACK,"Cargar Disco/Cinta \x10",MENU_ACTION(&FileSelector_Show)},
 	{MENU_ENTRY_CALLBACK,"Exit",MENU_ACTION(&Menu_Hide)},
 	{MENU_ENTRY_NULL,0,0}
 };
@@ -330,7 +331,7 @@ int main(int argc,char **argv)
 		return(0);
 
 	//OSD_Puts("Loading initial ROM...\n");
-	LoadROM("SPECTRUMDAT");
+	//LoadROM("SPECTRUMDAT");
 	FileSelector_SetLoadFunction(LoadMED);
 	Menu_Set(topmenu);
 	Menu_Hide();//oculta el menu por defecto al cargar el core.
@@ -344,15 +345,16 @@ int main(int argc,char **argv)
 		visible=Menu_Run();
 		dipsw = 0;
 		//Posicion 3 del menu, 0x3 = 2 bits max, <<9 = dips[1:0]	
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[1])  & 0x3) << 0; //[1:0] 
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[2])  & 0x3) << 2; //[3:2]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[3])  & 0x3) << 4; //[5:4]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[4])  & 0x3) << 6; //[7:6]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[5])  & 0x1) << 8; //[8]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[6])  & 0x1) << 9; //[9]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[7])  & 0x3) << 10; //[11:10]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[8])  & 0x7) << 12; //[14:12]
-		dipsw |= (MENU_CYCLE_VALUE(&topmenu[9])  & 0x1) << 15; //[15]
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[3])  & 0x3) << 10; 
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[4])  & 0x1) << 12; //[12]
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[5])  & 0x1) << 2; 
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[6])  & 0x1) << 13; 
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[7])  & 0x1) << 3;
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[8])  & 0x3) << 4; //[5:4]
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[9])  & 0x1) << 6;
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[10]) & 0x1) << 7; 
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[11]) & 0x1) << 9;
+		dipsw |= (MENU_CYCLE_VALUE(&topmenu[12]) & 0x3) << 14;
 		HW_HOST(REG_HOST_SW)=dipsw;	// Send the new values to the hardware.
 		// If the menu's visible, prevent keystrokes reaching the host core.
 		HW_HOST(REG_HOST_CONTROL)=(visible ?

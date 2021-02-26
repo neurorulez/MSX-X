@@ -134,12 +134,12 @@ module MSX_X
 //---------------------------------------------------------
 assign STM_RST = 1'b0;
 assign VGA_BLANK = 1'b1;
-assign VGA_CLOCK = clk_sys;
+assign VGA_CLOCK = memclk;//clk_sys;
 
 
 //-----------------------------------------------------------------
 
-assign LED  = ~leds[0];
+//assign LED  = ~leds[0];
 //assign LED  = mouse_strobe;
 
 `include "build_id.v"
@@ -238,7 +238,8 @@ reg [5:0] clock_div_q;
 
 always @(posedge clk_sys) begin // Bit1: 0=VGA/1=RGB
     reset <= resetW;
-    dipsw <= {1'b0,1'b0,2'b00,1'b0,1'b0,1'b0,1'b1};//{1'b0, ~status[6], ~status[5], status[4], status[3], ~status[1] & status[8], status[1], ~status[2]};
+    //dipsw <= {1'b0,1'b0,2'b00,1'b0,1'b0,1'b0,1'b1};//{1'b0, ~status[6], ~status[5], status[4], status[3], ~status[1] & status[8], status[1], ~status[2]};
+	 dipsw <= {1'b0, ~status[6], ~status[5], status[4], status[3], ~status[1] & status[8], status[1], ~status[2]};
     audio_li <= audio_l;
     if (status[9]) begin
         audio_ri <= audio_r;
@@ -257,15 +258,15 @@ wire host_scandoubler_disable;
 
 data_io data_io
 (
-	.clk(clk_sys),
+	.clk(memclk),//clk_sys),
 	.CLOCK_50(CLOCK_50), //Para modulos de I2s y Joystick
 	
-	.debug(),
+	.debug(LED),
 	
 	.reset_n(pll_locked),
 
-	.vga_hsync(~HSync),
-	.vga_vsync(~VSync),
+	.vga_hsync(HSync),
+	.vga_vsync(VSync),
 	
 	.red_i({R_O,2'b00}),
 	.green_i({G_O,2'b00}),
@@ -445,7 +446,7 @@ wire [5:0] osd_r_o, osd_g_o, osd_b_o;
          .scandoubler_disable  ( 1'b1 ),
          .ce_divider  ( 1'b0 ), //1 para clk_sys ou 0 com clksdram para usar blend
          .blend       ( status[12] ),
-         .no_csync    ( 1'b1 ),
+         .no_csync    ( ~status[1] ), //1'b1 ),
 
          .SPI_SCK     ( 0 ),
          .SPI_SS3     ( 0 ),
