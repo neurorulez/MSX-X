@@ -173,6 +173,18 @@ set_location_assignment PIN_B20 -to JOY_LOAD
 set_location_assignment PIN_B19 -to JOY_DATA
 set_location_assignment PIN_AA18 -to JOY_SELECT
 
+set_location_assignment PIN_M20 -to SCLK
+set_location_assignment PIN_AB14 -to LRCLK
+set_location_assignment PIN_AA15 -to SDIN
+
+# UART_PINS
+set_location_assignment PIN_K21 -to UART_RX
+set_location_assignment PIN_J21 -to UART_TX
+
+# UART WIFI
+#set_location_assignment PIN_AB20 -to UART_RXD
+#set_location_assignment PIN_AB16 -to UART_TXD
+
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to btn_n_i[4]
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to btn_n_i[3]
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to btn_n_i[2]

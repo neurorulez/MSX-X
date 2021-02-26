@@ -1070,11 +1070,11 @@ process (clk) begin
     if ( layout(0) = '0' and layout(1) = '1' ) then
       dbi1 <= rom101(conv_integer(adr(9 downto 0)));
     elsif ( layout(0) = '1' and layout(1) = '0' ) then
-      dbi1 <= rom105es(conv_integer(adr(9 downto 0)));
+      dbi1 <= rom101br(conv_integer(adr(9 downto 0)));
     elsif ( layout(0) = '1' and layout(1) = '1' ) then
       dbi1 <= rom105fr(conv_integer(adr(9 downto 0)));
     else
-      dbi1 <= rom101br(conv_integer(adr(9 downto 0)));
+      dbi1 <= rom105es(conv_integer(adr(9 downto 0)));
     end if;
       
     dbi2 <= rom106(conv_integer(adr(8 downto 0)));

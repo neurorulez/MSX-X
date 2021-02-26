@@ -111,7 +111,9 @@ module MSX_X
 	 output wire	SCLK,
 	 output wire	LRCLK,
 	 output wire	SDIN,
-	 
+
+	 input  wire	UART_RX,
+	 output wire	UART_TX,	 
     // VGA
     output  [4:0] VGA_R,
     output  [4:0] VGA_G,
