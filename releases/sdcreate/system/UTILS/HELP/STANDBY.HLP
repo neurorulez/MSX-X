@@ -1,0 +1,49 @@
+STANDBY 	    Standby timer for IDE devices by MSX-Voyagers (1998)
+-------
+
+
+Format: 	  STANDBY [device] [Timer period value]
+
+
+Purpose:	  The IDE device waits for  the specified time period and
+	if  no command  is received  then	the device  automatically
+	enters the Standby mode. 
+
+
+Use:		  The  [device] specifies the IDE device on which STANDBY
+	is to operate.
+
+		  [device] = 0	Selects IDE device 0  (master)
+			     1	Selects IDE device 1  (slave )
+		 
+		  [Timer period value] = 0 ... 255
+
+			 
+		  If device supports ATA-3 Standar then:
+			
+		    Timer period value	    Corresponding timeout period
+		  ----------------------  -------------------------------
+			    0			  Timeout disabled
+			  1-240 		   (value * 5) s
+			 241-251	      ((value - 240) * 30) min
+			   252			       21 min
+			   253		    Period between 8 and 12 hrs
+			   254			      Reserved
+			   255			     21 min 15 s
+			 
+		  Note: Times are approximate.
+			 
+		  If  device  does  not support  ATA-3 Standar	then  the 
+	values are vendor specific.
+		 
+		  Both parammetres must by given.
+	
+		  Note	that  STANDBY is a transient  command,	and  must
+	therefore be loaded off disk.
+
+Examples:
+
+	STANDBY 0 24
+
+	IDE device 0 (master) waits 2 minutes before enters in Standby mode.
+

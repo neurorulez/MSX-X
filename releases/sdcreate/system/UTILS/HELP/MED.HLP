@@ -1,0 +1,23 @@
+MED
+---
+***   Msx-EDitor   ***
+
+Format :     MED
+
+Fonction:    Editeur de lignes/fichiers ASCII / Traitement de Texte
+
+Usage:       Traitement de texte. Sert avantageusement pour cr‚er / 
+        modifier des fichiers de commande par lot (SETKEY.BAT,etc..)
+
+             Toutes les commandes  disponibles  sont  inscrites  sur
+        l'‚cran. La touche [SELECT] appelle le Menu Principal d'Aide
+        AprŠs l'appel d'un groupe de commandes par une des touche de
+        fonction, la touche [SELECT]  donne le d‚tail de chacune des
+        commandes du groupe.
+
+             Pour modifier un fichier, il suffit de taper son nom de
+        fichier avec extension [NOMFICH.EXT]. Le fichier sera charg‚
+        et affich‚ a l'‚cran .
+
+Exemple:     Ce texte et le fichier KEY.HLP ont ‚t‚ ‚cris avec MED .
+

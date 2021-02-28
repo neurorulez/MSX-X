@@ -1,0 +1,23 @@
+---------------------------------------------------------------------------
+
+       $A      Drive die wordt opgegeven 
+       $F      Filenaam welke op de commandline is ingevoerd.
+       $C      Filenaam van het aangewezen bestand
+       $X      Filenaam van het aangewezen bestand (zonder extensie)
+       $D      Huidige drive.
+       $d      Tijdelijke drive (uit environment item TEMP)
+       $J      Voer het programma in Kanji-Mode uit
+       $K      Wacht op toetsdruk voordat teruggekeerd wordt naar MM
+       $O      Inhoud van het environment item SHELL
+       $P      Huidige Path.
+       $R      Zet Return in de commandline
+       $T      Filenamen van geselecteerde files (een voor een)
+       $t      Het zelfde als $T echter zonder extensie
+       $M      Filenamen van geselecteerde files (achter elkaar)
+       $m      Het zelfde als $M echter zonder extensie
+       $V      Toon file met interne viewer
+       $$      Zet enkele '$' in de commandline
+       $Z      File uitpakken afhankelijk van anex
+
+----------------------------------------------------------------------------
+

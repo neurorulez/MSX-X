@@ -1,0 +1,108 @@
+
+;＞＞＞＞＞＞  拡張子別実行･データファイル  ＭＭ ver 2 以降用  ＜＜＜＜＜＜
+;      ＞＞＞＞＞                                          ＜＜＜＜＜
+;            ＞＞＞＞ 1993,1994,1995 Copyright (C)MOGU ＜＜＜＜
+
+;==============================================================================
+;                     ■ 拡張子別実行の書式について ■
+;
+; .1
+;	<.???> TAB or SPACE <command[option]> TAB or SPACE [rem]
+;	   ^                        ^                        ^
+;	   |                        |                        + ｺﾒﾝﾄの入力
+;	   |                        |
+;	   |                        + 実行させたいｺﾏﾝﾄﾞの入力 (ﾏｸﾛの使用が可能)
+;          |
+;          + 反応させたい拡張子の入力
+;
+; .2
+;	<:command> TAB or SPACE <command[option]> TAB or SPACE [rem]
+;	    ^                       ^                            ^
+;	    |                       |                            + ｺﾒﾝﾄの入力
+;	    |                       |
+;	    |                       + 実行させたいｺﾏﾝﾄﾞの入力 (ﾏｸﾛの使用が可能)
+;           |
+;           + 反応させたいﾌｧｲﾙﾈｰﾑの入力
+;
+;==============================================================================
+
+
+.AS8	MEGAMU $C
+.BAS	BASIC $C
+.BAT	$C
+.BGM	PLAYER $C A:
+.COM	$C$K
+.CRT	CHRIS $C
+.DSK    EP $T /B/D/R
+.EVA	EVASD $C
+.FD1	OPFXSD $C /D1
+.FD2	OPFXSD $C /D2
+.FD3	OPFXSD $C /D3
+.FD4	OPFXSD $C /D4
+.FD5	OPFXSD $C /D5
+.FD6	OPFXSD $C /D6
+.FD7	OPFXSD $C /D7
+.FD8	OPFXSD $C /D8
+.FD9	OPFXSD $C /D9
+.FNS	FUPDATE -L $C$J$K
+.GE5	BLS $C
+.GRP	BLS $C
+.JPG	JPD $T
+.KO8	MEGAMU $C
+.KS8	MEGAMU $C
+.LDR	BASIC $C
+.LZH	LHEXT L $C$K
+.MAG	BLS $C
+.MAX	BLS $C
+.MBM	MBMPLAY $C -D
+.MBK	MBMPLAY $C
+.MCM	MCDRV $C
+.MID	MIDPLAY $C	;MIDRY $C /I31	;SMF $C
+.MIO	MP $C
+.MIF    MV $T
+.MKI	BLS $C
+.MOD	MMP $C
+.MSA	MSA $C
+.MUS	MGSC $C -P -N
+.MWM	MWMPLAY $C
+.MWK	MWMPLAY $C
+.OPF	OPFXSD $C /O
+.PCK	PCMPLAY $C
+.PCM	PCMPLAY $C
+.PI 	PI $C
+.PIC	BLS $C
+.PMA	PMEXT $C$K
+.PT3	PT3PLAY $C
+.ROM	ROMLOAD $T /R
+.SC?	BLS $C
+.SR?	BLS $C
+.TKI	TALKIE $C
+.WAV	HWAV $C
+.ZIP	UNZIP2 $C$K
+.???	TV $C
+
+
+;▼▲ 使用可能のマクロ命令一覧表 ▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲
+;
+;	$A =	出力ドライブ名（ファイル名入力指定があった時のみ有効）
+;	$F =	入力されたファイル名（ファイル名入力指定があった時のみ有効）
+;	$C =	カーソルファイル名（拡張子を含む）
+;	$X =	カーソルファイル名 (拡張子を含まない）
+;	$D =	カレントドライブ名
+;	$d =	テンポラリドライブ名
+;	$J =	漢字モードでの実行
+;	$K =	実行後キー入力待ち
+;	$k =	一つコマンドを終える毎にキー入力待ち
+;	$P =	カレントディレクトリのパス
+;	$R =	一行改行
+;	$T =	タグファイルの連続実行（拡張子を含む）
+;	$t =	タグファイルの連続実行（拡張子を含まない）
+;	$M =	タグファイルを一行にまとめて実行（拡張子を含む）
+;	$m =	タグファイルを一行にまとめて実行（拡張子を含まない）
+;	$V =	カーソルファイルを内蔵ビュアで見る（必ず行の先頭に指定する）
+;	$$ =	"$" の入力
+;	$Z =	タグファイル名（アーカイブの解凍時のみ使用）
+;
+;▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲
+｣▼▲▼▲▼▲
+

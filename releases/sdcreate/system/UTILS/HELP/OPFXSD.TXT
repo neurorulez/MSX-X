@@ -1,0 +1,311 @@
+MEGAFLASHROM SCC+ SD 
+
+USER'S MANUAL 
+
+[DESCRIPTION] 
+
+MegaFlashROM SCC+ SD is a combo cartridge with a SD card reader and an 
+improved MegaFlashROM SCC+. 
+
+Each device is located in a subslot, so the cartridge must be inserted 
+in a primary slot. It will not work in a slot expander. 
+
+OPFXSD is the software you must use to operate the cartridge. You can 
+find it in the "FLASH" section of: 
+
+www.msxcartridgeshop.com 
+
+[MINIMUM REQUIREMENTS] 
+
+*  MSX computer with at least one free Slot 
+
+*  64K RAM (MSX-DOS) or 128K (MSX-DOS 2) 
+
+[FEATURES] 
+
+*  8192 KB (64 Mbits) flashROM memory 
+
+*  Sound chips: SCC-I and PSG 
+
+*  Mapper: ASC8, ASC16, Konami, Konami SCC, linear 48K/64K 
+
+*  Compatible with MMC, SD and SDHC cards in FAT12 or FAT16 
+
+*  Two micro SD slots 
+
+*  High transfer speed. 
+
+*  Recovery mode: Let's you configure the cartridge easily. 
+
+[WORKING] 
+
+Insert the MegaFlashROM SCC+ SD cart in one slot while the computer is 
+turned off. 
+
+Turn the computer on and Nextor (the disk operative system) will boot. 
+If you need to reinstall the cartridge software check INSTALATION 
+section. 
+
+Execute OPFXSD by selecting the ROM and needed options. 
+
+Once the ROM is stored the cartridge will behave as if it were the 
+original one and won't be erased even if the computer is turned off. 
+
+ESC key or the one configured through /T option must be pressed while 
+computer is booting to avoid the execution of the cart. 
+
+If it doesn't work, you can erase the cartridge using the recovery 
+mode. Press CURSOR UP while booting. 
+
+RESET key can be hold on pressed for 5 seconds to disable MegaFlashROM 
+SCC+ temporarily if previous system would fail for any reason. 
+
+[PSG] 
+
+The PSG included in the cartridge is mapped to ports #10-#12. 
+
+Internal MSX	PSG MegaFlashROM PSG 
+
+Port #A0 	Port #10 
+Port #A1 	Port #11 
+Port #A2 	Port #12 
+
+[OPTIONS] 
+
+/X 
+Executes the game stored in the cartridge. 
+OPFX KLORE2.ROM /X <- Stores the ROM and executes it 
+OPFX /X <- Executes whatever is stored in the cartridge 
+
+/E 
+Patchs Konami ROMs to simulate that they are executed in an European 
+computer 
+OPFX USAS.ROM /E <- Shows the texts in English in a Japanese computer 
+
+/J 
+Patchs the Konami ROMs to simulate that they are executed in a Japanese 
+computer 
+OPFX NEMESIS3.ROM /J <- Shows the texts in Japanese in an European 
+computer 
+
+/8 
+Enables the R800 CPU when executing the ROM or turbo mode of Panasonic 
+WX/WSX/FX models. 
+
+/Hxx 
+Changes the Frequency when executing the ROM. It won't have any effect 
+if the game change it again during its execution. 
+/H50 <- 50 Hz 
+/H60 <- 60 Hz 
+
+/RCxx 
+Simulates a Konami cart inserted in another slot. 
+OPFX NEMESIS2.ROM /RC743<-Simulates Penguin Adventure 
+
+/Kx 
+Forces the execution of the ROM with a Konami mapper 
+/K4 <- Konami 
+/K5 <- Konami SCC 
+
+/Ax 
+Forces the execution of the ROM with a ASCII mapper 
+/A8 <- ASC8 
+/A16 <- ASC16 
+
+/L 
+Indicates that the ROM has no mapper and works in #0000-#FFFF area as 
+48K or 64K roms. 
+
+/M 
+Manual mode. OPFXSD won't indentify the ROM mapper automatically. 
+
+/C 
+Erases the ROM stored in MegaFlashROM SCC+. 
+
+/C1 Fully erases the cartridge (MegaFlashROM and SD kernel) 
+
+/Sxx 
+Forces the slot where the cartridge is placed: 
+/S1 = Slot 1 
+/S13 = Slot 1, subslot 3 
+
+/T[rc] 
+Fixes the key which will avoid the execution of the ROM stored in the 
+cartridge. ESC acts in that way by default. To select the desired key it 
+is necessary to select the file and column of the key matrix 
+/T64 <- File 6, Column 4 = CODE 
+/T82 <- File 8, Column 2 = INS 
+
+[See keyboard matrices] 
+
+/N 
+Inverts the logic of the key that avoids the execution of the ROM 
+(Pressed / Not pressed) 
+
+/O 
+Creates a MULTIROM with the games inside the MULTIROM.OPF file 
+[See MULTIROM section] 
+
+/F 
+Executes the game by using a "soft reset”. 
+
+/P 
+Patchs a Konami ROM to use the PSG of the cartridge. So the sound 
+balance of SCC and PSG is constant and perfect. 
+
+/P1 Clone internal PSG using the external one. 
+
+/Dx 
+Loads a DSK (x=1 to 9) 
+[See DSK] 
+
+/I 
+Installs cartridge’s software 
+
+[See INSTALATION] 
+
+/U 
+Disables subslots and set MegaFlashROM SCC+ as unique device available. 
+
+/1 
+Write the ROM at x1 speed instead of x4. 
+
+
+[INSTALATION] 
+
+In case you need to reinstall the software, follow these steps. 
+
+OPFXSD nextor.rom /I: 
+Install SD kernel. Needed to use the SD interface. 
+
+Note: this process must be done using another storage device different 
+from the SD reader in the cartridge. You can also use RECOVERY mode to 
+install the kernel. 
+
+OPFXSD dskrom.rom /I1: 
+Installs the diskROM used to load DSKs. Needed to run DSKs. 
+
+OPFXSD romdisk.dsk /ID: 
+Installs a ROM drive. The ROM drive enables you to put a diskimage into 
+the flashrom. It will be mounted as an extra readonly drive. The ROM 
+drive is always available (unless erased), even when not cards are 
+inserted. It can be used to boot from or store files that you use 
+regularly. 
+
+OPFXSD recovery.rom /I34: 
+Installs RECOVERY program. 
+
+Note: Update only when the cartridge maker tells you to do it. 
+
+[See RECOVERY] 
+
+[RECOVERY] 
+
+Recovery mode let’s you to configure the cartridge in a easy way, 
+without using other disk interfaces. 
+
+In order to enter the recovery menú, hold CURSOR UP while booting. The 
+available options are: 
+
+F1: Erase MegaFlashROM. 
+This will erase the ROM stored in the MegaFlashROM SCC+. It is useful if 
+the ROM is corrupted and can’t be disabled by pressing ESC. 
+
+F2: Erase SD kernel 
+Erasing the SD kernel the SD reader will be disabled and the MSX will 
+not identify it as a disk interface. 
+
+F3: Erase ROM disk 
+Erase the disk image installed as ROM disk. 
+
+F4: Install SD kernel 
+Let's you reinstall the SD kernel, so the SD interface will work 
+again. You must format a SD card a copy in it KERNEL.DAT file. 
+
+F5: Show SD card information 
+Shows information about the card and its partitions. 
+
+Pressing LEFT and RIGHT you can change SD card slot. 
+
+[DSK] 
+
+A DSK file is a disk image that contains the information of the sectors 
+of a real disk. 
+
+It is possible to load and run up to 9 disk images of 720 KB. These 
+files can be loaded and changed independently. It is not necessary to 
+previously erase the former ones. Since the DSK are stored on flashROM 
+memory, they will be read only. 
+
+In order to load a DSK you must use /D option, followed by the number of 
+disk you want to select (from 1 to 9) 
+
+In example: 
+
+OPFXSD undead.dsk /D1 
+
+In games with several disks, you can change the disk by holding the 
+desired number key when the disk is accessed (i.e.: after pressing space 
+after a change disk dialog in a game) 
+
+Pressing number 0 the disk access will be redirected to the next disk 
+interface, probably the floppy disk. In this way you can save game data. 
+
+Note: Remove any other external disk interfaces when loading DSKs. 
+
+[MULTIROM] 
+
+It is possible to put several games into the cartridge at the same time, 
+as many as they fit in the cartridge's memory, up to 511. In order to 
+create a multiROM, you need to make a MULTIROM.OPF file with the file 
+names to load. Each file name must be in a text line and it is possible 
+to set the mapper type after the name. Add at the end of the list the 
+keyword [END]. In order to pause the loading process you can use 
+[PAUSE]. Once this file is ready, you need to process the list using the 
+option /O. The ROMs to load must be in the same path that OPFXSD and 
+MUTIROM.OPF. 
+
+Example of MULTIROM.OPF content: 
+
+GALIOUS.ROM /K4 
+HERO.ROM 
+PENGUIN.ROM 
+KLORE2.ROM 
+[END] 
+
+Command to make the multiROM: OPFXSD /O 
+
+After booting the cartridge a menu will be show with the games in the 
+cartridge. Before running the game it is possible to change the video 
+and CPU modes. 
+
+Controls: 
+
+Cursor keys / Joystick 
+Move 
+
+Space / Fire 
+Select 
+
+TAB / Fire 2 
+Enter / Exit configuration 
+
+ESC 
+Exit multiROM 
+
+[STAFF] 
+
+Hardware 
+Kazuhiro Tsujikawa 
+Manuel Pazos 
+
+Software 
+Manuel Pazos (Guillian) 
+Armando Perez (Ramones) 
+Nestor Soriano (Konamiman) 
+
+English translation 
+Francis Álvarez (SaebaMSX) 
+
+Artwork 
+Nova706 
