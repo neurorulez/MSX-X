@@ -2892,7 +2892,7 @@ begin
 --             '1' when( adr(  7 downto 1 ) = "0111110" and pSltIorq_n = '0' and pSltWr_n = '0'                        )else   -- OPLL ports 7C-7Dh via OPL3
                '0';
 
-	 dac_out <= lpf5_wave & "00";
+	 dac_out <= DACin & "00"; --lpf5_wave & "00";
 
     -- debug enabler 'SHIFT+PAUSE'
     process( clk21m )
