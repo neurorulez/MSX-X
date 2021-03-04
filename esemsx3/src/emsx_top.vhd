@@ -176,7 +176,12 @@ entity emsx_top is
         pIopRsv21       : in    std_logic;
 
         osd_o           : out   std_logic_vector(  7 downto 0);
-		  dac_out         : out   std_logic_vector(  15 downto 0);
+		  
+        pAudioPSG       : out   std_logic_vector(  9 downto 0 );
+        pAudioOPLL      : out   std_logic_vector( 13 downto 0 );
+        pAudioPCM       : out   std_logic_vector( 15 downto 0 );
+        pAudioTRPCM     : out   std_logic_vector(  7 downto 0 );
+		  pAudioOPL3      : out   std_logic_vector( 15 downto 0 );
 		  
         opl3_enabled    : in std_logic;
         slot0_exp       : in std_logic;
@@ -440,7 +445,7 @@ architecture RTL of emsx_top is
             cmtin       : in    std_logic;
             keymode     : in    std_logic;
 
-            wave        : out   std_logic_vector(  7 downto 0 )
+            wave        : out   std_logic_vector(  9 downto 0 )
         );
     end component;
 
@@ -480,7 +485,7 @@ architecture RTL of emsx_top is
             wrt         : in    std_logic;
             adr         : in    std_logic_vector( 15 downto 0 );
             dbo         : in    std_logic_vector(  7 downto 0 );
-            wav         : out   std_logic_vector(  9 downto 0 )
+            wav         : out   std_logic_vector( 13 downto 0 )
             );
     end component;
 
@@ -911,7 +916,7 @@ architecture RTL of emsx_top is
     -- PSG signals
     signal  PsgReq          : std_logic;
     signal  PsgDbi          : std_logic_vector(  7 downto 0 );
-    signal  PsgAmp          : std_logic_vector(  7 downto 0 );
+    signal  PsgAmp          : std_logic_vector(  9 downto 0 );
 
     -- SCC signals
     signal  Scc1Req         : std_logic;
@@ -935,7 +940,7 @@ architecture RTL of emsx_top is
     -- Opll signals
     signal  OpllReq         : std_logic;
     signal  OpllAck         : std_logic;
-    signal  OpllAmp         : std_logic_vector(  9 downto 0 );
+    signal  OpllAmp         : std_logic_vector( 13 downto 0 );
     signal  OpllEnaWait     : std_logic;
 
     -- Sound signals
@@ -2148,7 +2153,7 @@ begin
         if( clk21m'event and clk21m = '1' )then
 
             -- amplitude ramp of the PSG (full range)
-            ff_prepsg <= ("0" & PsgAmp) + (KeyClick & "00000");
+            ff_prepsg <= ("0" & PsgAmp(9 downto 2)) + (KeyClick & "00000");
             c_Psg       := ("1" & PsgVol) - ("0" & MstrVol);
 --          if( PsgVol = "000" or MstrVol = "111" or SdPaus = '1' )then             -- dismissed
             if( PsgVol = "000" or MstrVol = "111" )then
@@ -2187,20 +2192,20 @@ begin
                 ff_opll <= c_opll_offset;
             elsif( OpllAmp < c_opll_zero )then
                 if( c_Opll > h_thrd )then
-                    chOpll   := ((c_opll_zero - OpllAmp) * (OpllVol - MstrVol + h_ramp)) & "000";
+                    chOpll   := ((c_opll_zero(13 downto 4) - OpllAmp(13 downto 4)) * (OpllVol - MstrVol + h_ramp)) & "000";
                 elsif( c_Opll > m_thrd )then
-                    chOpll   := "0" & ((c_opll_zero - OpllAmp) * (OpllVol - MstrVol + m_ramp)) & "00";
+                    chOpll   := "0" & ((c_opll_zero(13 downto 4) - OpllAmp(13 downto 4)) * (OpllVol - MstrVol + m_ramp)) & "00";
                 else
-                    chOpll   := "00" & ((c_opll_zero - OpllAmp) * (OpllVol - MstrVol + l_ramp)) & "0";
+                    chOpll   := "00" & ((c_opll_zero(13 downto 4) - OpllAmp(13 downto 4)) * (OpllVol - MstrVol + l_ramp)) & "0";
                 end if;
                 ff_opll <= c_opll_offset - (chOpll - chOpll( chOpll'high downto  3 ));
             else
                 if( c_Opll > h_thrd )then
-                    chOpll   := ((OpllAmp - c_opll_zero) * (OpllVol - MstrVol + h_ramp)) & "000";
+                    chOpll   := ((OpllAmp(13 downto 4) - c_opll_zero(13 downto 4)) * (OpllVol - MstrVol + h_ramp)) & "000";
                 elsif( c_Opll > m_thrd )then
-                    chOpll   := "0" & ((OpllAmp - c_opll_zero) * (OpllVol - MstrVol + m_ramp)) & "00";
+                    chOpll   := "0" & ((OpllAmp(13 downto 4) - c_opll_zero(13 downto 4)) * (OpllVol - MstrVol + m_ramp)) & "00";
                 else
-                    chOpll   := "00" & ((OpllAmp - c_opll_zero) * (OpllVol - MstrVol + l_ramp)) & "0";
+                    chOpll   := "00" & ((OpllAmp(13 downto 4) - c_opll_zero(13 downto 4)) * (OpllVol - MstrVol + l_ramp)) & "0";
                 end if;
                 ff_opll <= c_opll_offset + (chOpll - chOpll( chOpll'high downto  3 ));
             end if;
@@ -2258,7 +2263,7 @@ begin
 
     pDac_SL   <=  "ZZZZZZ"  when( pseudoStereo = '1' and CmtScro = '0' )else
                   DACout & "ZZZZ" & DACout;                     -- the DACout setting is used to balance the input line of external slots
-
+						
     -- Cassette Magnetic Tape (CMT) interface
     pDac_SR(4) <= cmtIn;
 
@@ -2892,8 +2897,13 @@ begin
 --             '1' when( adr(  7 downto 1 ) = "0111110" and pSltIorq_n = '0' and pSltWr_n = '0'                        )else   -- OPLL ports 7C-7Dh via OPL3
                '0';
 
-	 dac_out <= DACin & "00"; --lpf5_wave & "00";
-
+	 --dac_out <= DACin & "00"; --lpf5_wave & "00";
+	 pAudioPSG  <= ("0" & PsgAmp(9 downto 1)) + (KeyClick & "00000");
+	 pAudioPCM  <= ((Scc1AmpL(14) & Scc1AmpL) + (Scc2AmpL(14) & Scc2AmpL));
+	 pAudioTRPCM <= tr_pcm_wave_out;
+	 pAudioOPLL <= OpllAmp;
+	 pAudioOPL3 <= opl3_sound_s;
+	 
     -- debug enabler 'SHIFT+PAUSE'
     process( clk21m )
     constant DEBUG_MODE     : boolean := FALSE; -- TRUE = enabled, FALSE = disabled

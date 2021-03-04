@@ -20,7 +20,7 @@ set_global_assignment -name VHDL_FILE [file join $::quartus(qip_path) src/video/
 set_global_assignment -name VHDL_FILE [file join $::quartus(qip_path) src/sound/scc/megaram.vhd]
 set_global_assignment -name VHDL_FILE [file join $::quartus(qip_path) src/sound/scc/scc_wave.vhd]
 set_global_assignment -name VHDL_FILE [file join $::quartus(qip_path) src/sound/psg/psg.vhd]
-set_global_assignment -name VHDL_FILE [file join $::quartus(qip_path) src/sound/psg/psg_wave.vhd]
+set_global_assignment -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) src/sound/psg/ym2149.sv]
 set_global_assignment -name VHDL_FILE [file join $::quartus(qip_path) src/sound/opll/vm2413/AttackTable.vhd]
 set_global_assignment -name VHDL_FILE [file join $::quartus(qip_path) src/sound/opll/vm2413/Controller.vhd]
 set_global_assignment -name VHDL_FILE [file join $::quartus(qip_path) src/sound/opll/vm2413/EnvelopeGenerator.vhd]
