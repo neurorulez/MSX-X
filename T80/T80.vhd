@@ -1,39 +1,3 @@
---
--- Multicore 2 / Multicore 2+
---
--- Copyright (c) 2017-2020 - Victor Trucco
---
--- All rights reserved
---
--- Redistribution and use in source and synthezised forms, with or without
--- modification, are permitted provided that the following conditions are met:
---
--- Redistributions of source code must retain the above copyright notice,
--- this list of conditions and the following disclaimer.
---
--- Redistributions in synthesized form must reproduce the above copyright
--- notice, this list of conditions and the following disclaimer in the
--- documentation and/or other materials provided with the distribution.
---
--- Neither the name of the author nor the names of other contributors may
--- be used to endorse or promote products derived from this software without
--- specific prior written permission.
---
--- THIS CODE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
--- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
--- THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
--- PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE
--- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
--- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
--- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
--- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
--- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
--- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
--- POSSIBILITY OF SUCH DAMAGE.
---
--- You are responsible for any legal issues arising from your use of this code.
---
-		
 --------------------------------------------------------------------------------
 -- ****
 -- T80(c) core. Attempt to finish all undocumented features and provide
@@ -583,7 +547,8 @@ begin
 						elsif MCycle = MCycles and NMICycle = '1' then
 							ABus <= "0000000001100110";
 							PC <= "0000000001100110";
-						elsif MCycle = "011" and IntCycle = '1' and IStatus = "10" then
+						elsif ((Mode /= 3 and MCycle = "011") or (Mode = 3 and MCycle = "100"))
+							and IntCycle = '1' and IStatus = "10" then
 							ABus(15 downto 8) <= I;
 							ABus(7 downto 0) <= WZ(7 downto 0);
 							PC(15 downto 8) <= unsigned(I);
@@ -1312,6 +1277,13 @@ begin
 								BusAck <= '1';
 							else
 								TState <= "001";
+								if (IntCycle = '1' and Mode = 3) then -- GB: read interrupt at MCycle 3
+									if (MCycle = "010") then
+										M1_n <= '0';
+									else
+										M1_n <= '1';
+									end if;
+								end if;
 								if NextIs_XY_Fetch = '1' then
 									MCycle <= "110";
 									Pre_XY_F_M <= MCycle;

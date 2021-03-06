@@ -1,41 +1,5 @@
 --
--- Multicore 2 / Multicore 2+
---
--- Copyright (c) 2017-2020 - Victor Trucco
---
--- All rights reserved
---
--- Redistribution and use in source and synthezised forms, with or without
--- modification, are permitted provided that the following conditions are met:
---
--- Redistributions of source code must retain the above copyright notice,
--- this list of conditions and the following disclaimer.
---
--- Redistributions in synthesized form must reproduce the above copyright
--- notice, this list of conditions and the following disclaimer in the
--- documentation and/or other materials provided with the distribution.
---
--- Neither the name of the author nor the names of other contributors may
--- be used to endorse or promote products derived from this software without
--- specific prior written permission.
---
--- THIS CODE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
--- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
--- THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
--- PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE
--- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
--- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
--- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
--- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
--- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
--- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
--- POSSIBILITY OF SUCH DAMAGE.
---
--- You are responsible for any legal issues arising from your use of this code.
---
-		
---
--- iplrom.vhd
+-- iplrom_304k.vhd
 --   initial program loader for Cyclone & EPCS (Altera)
 --   Revision 2.00
 --
@@ -90,8 +54,8 @@ architecture rtl of iplrom is
         X"1D",X"FD",X"3E",X"40",X"32",X"00",X"60",X"21",X"00",X"C0",X"04",X"4D",X"55",X"5D",
 
 --      X"C3",X"86",X"FC",X"38",X"43",      -- loading BIOS from EPCS only
---        X"CD",X"14",X"FE",X"38",X"43",      -- loading BIOS from SD-CARD or EPCS (default)
-      X"CD",X"14",X"FE",X"38",X"FB",      -- loading BIOS from SD-CARD only
+        X"CD",X"14",X"FE",X"38",X"43",      -- loading BIOS from SD CARD or EPCS (default)
+--      X"CD",X"14",X"FE",X"38",X"FB",      -- loading BIOS from SD CARD only
 
                           X"21",X"00",X"C0",X"01",X"80",X"00",X"3E",X"46",X"ED",X"B1",X"B7",X"20",X"0C",
         X"86",X"23",X"86",X"D6",X"DB",X"2B",X"20",X"F1",X"48",X"59",X"51",X"37",X"38",X"57",X"06",X"04",
@@ -108,8 +72,8 @@ architecture rtl of iplrom is
         X"ED",X"52",X"C1",X"D1",X"28",X"01",X"37",X"DA",X"86",X"FC",X"3E",X"80",X"06",X"09",X"CD",X"6E",
         X"FD",X"CD",X"4F",X"FD",X"06",
 
---      X"0F",                              -- loading BIOS 384 kB from SD-CARD / JIS1 only
-        X"17",                              -- loading BIOS 512 kB from SD-CARD / JIS1+JIS2 (default)
+--      X"0F",                              -- loading BIOS 384 kB from SD CARD / JIS1 only
+        X"17",                              -- loading BIOS 512 kB from SD CARD / JIS1+JIS2 (default)
 
                                             X"CD",X"6E",X"FD",X"2F",X"07",X"D3",X"4E",X"AF",X"32",X"00",
         X"60",X"3C",X"32",X"00",X"68",X"32",X"00",X"70",X"32",X"00",X"78",X"3E",X"C0",X"D3",X"A8",X"C7",

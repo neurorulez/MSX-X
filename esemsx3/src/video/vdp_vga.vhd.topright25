@@ -6,25 +6,25 @@
 --  All rights reserved.
 --                                     http://www.ohnaka.jp/ese-vdp/
 --
---  –{ƒ\ƒtƒgƒEƒFƒA‚¨‚æ‚Ñ–{ƒ\ƒtƒgƒEƒFƒA‚ÉŠî‚Ã‚¢‚Äì¬‚³‚ê‚½”h¶•¨‚ÍAˆÈ‰º‚ÌðŒ‚ð
---  –ž‚½‚·ê‡‚ÉŒÀ‚èAÄ”Ð•z‚¨‚æ‚ÑŽg—p‚ª‹–‰Â‚³‚ê‚Ü‚·B
+--  æœ¬ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ãŠã‚ˆã³æœ¬ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã«åŸºã¥ã„ã¦ä½œæˆã•ã‚ŒãŸæ´¾ç”Ÿç‰©ã¯ã€ä»¥ä¸‹ã®æ¡ä»¶ã‚’
+--  æº€ãŸã™å ´åˆã«é™ã‚Šã€å†é ’å¸ƒãŠã‚ˆã³ä½¿ç”¨ãŒè¨±å¯ã•ã‚Œã¾ã™ã€‚
 --
---  1.ƒ\[ƒXƒR[ƒhŒ`Ž®‚ÅÄ”Ð•z‚·‚éê‡Aã‹L‚Ì’˜ìŒ •\Ž¦A–{ðŒˆê——A‚¨‚æ‚Ñ‰º‹L
---    –ÆÓð€‚ð‚»‚Ì‚Ü‚Ü‚ÌŒ`‚Å•ÛŽ‚·‚é‚±‚ÆB
---  2.ƒoƒCƒiƒŠŒ`Ž®‚ÅÄ”Ð•z‚·‚éê‡A”Ð•z•¨‚É•t‘®‚ÌƒhƒLƒ…ƒƒ“ƒg“™‚ÌŽ‘—¿‚ÉAã‹L‚Ì
---    ’˜ìŒ •\Ž¦A–{ðŒˆê——A‚¨‚æ‚Ñ‰º‹L–ÆÓð€‚ðŠÜ‚ß‚é‚±‚ÆB
---  3.‘–Ê‚É‚æ‚éŽ–‘O‚Ì‹–‰Â‚È‚µ‚ÉA–{ƒ\ƒtƒgƒEƒFƒA‚ð”Ì”„A‚¨‚æ‚Ñ¤‹Æ“I‚È»•i‚âŠˆ“®
---    ‚ÉŽg—p‚µ‚È‚¢‚±‚ÆB
+--  1.ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰å½¢å¼ã§å†é ’å¸ƒã™ã‚‹å ´åˆã€ä¸Šè¨˜ã®è‘—ä½œæ¨©è¡¨ç¤ºã€æœ¬æ¡ä»¶ä¸€è¦§ã€ãŠã‚ˆã³ä¸‹è¨˜
+--    å…è²¬æ¡é …ã‚’ãã®ã¾ã¾ã®å½¢ã§ä¿æŒã™ã‚‹ã“ã¨ã€‚
+--  2.ãƒã‚¤ãƒŠãƒªå½¢å¼ã§å†é ’å¸ƒã™ã‚‹å ´åˆã€é ’å¸ƒç‰©ã«ä»˜å±žã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆç­‰ã®è³‡æ–™ã«ã€ä¸Šè¨˜ã®
+--    è‘—ä½œæ¨©è¡¨ç¤ºã€æœ¬æ¡ä»¶ä¸€è¦§ã€ãŠã‚ˆã³ä¸‹è¨˜å…è²¬æ¡é …ã‚’å«ã‚ã‚‹ã“ã¨ã€‚
+--  3.æ›¸é¢ã«ã‚ˆã‚‹äº‹å‰ã®è¨±å¯ãªã—ã«ã€æœ¬ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã‚’è²©å£²ã€ãŠã‚ˆã³å•†æ¥­çš„ãªè£½å“ã‚„æ´»å‹•
+--    ã«ä½¿ç”¨ã—ãªã„ã“ã¨ã€‚
 --
---  –{ƒ\ƒtƒgƒEƒFƒA‚ÍA’˜ìŒ ŽÒ‚É‚æ‚Á‚ÄuŒ»ó‚Ì‚Ü‚Üv’ñ‹Ÿ‚³‚ê‚Ä‚¢‚Ü‚·B’˜ìŒ ŽÒ‚ÍA
---  “Á’è–Ú“I‚Ö‚Ì“K‡«‚Ì•ÛØA¤•i«‚Ì•ÛØA‚Ü‚½‚»‚ê‚ÉŒÀ’è‚³‚ê‚È‚¢A‚¢‚©‚È‚é–¾Ž¦
---  “I‚à‚µ‚­‚ÍˆÃ–Ù‚È•ÛØÓ”C‚à•‰‚¢‚Ü‚¹‚ñB’˜ìŒ ŽÒ‚ÍAŽ–—R‚Ì‚¢‚©‚ñ‚ð–â‚í‚¸A‘¹ŠQ
---  ”­¶‚ÌŒ´ˆö‚¢‚©‚ñ‚ð–â‚í‚¸A‚©‚ÂÓ”C‚Ìª‹’‚ªŒ_–ñ‚Å‚ ‚é‚©ŒµŠiÓ”C‚Å‚ ‚é‚©i‰ßŽ¸
---  ‚»‚Ì‘¼‚Ìj•s–@sˆ×‚Å‚ ‚é‚©‚ð–â‚í‚¸A‰¼‚É‚»‚Ì‚æ‚¤‚È‘¹ŠQ‚ª”­¶‚·‚é‰Â”\«‚ð’m‚ç
---  ‚³‚ê‚Ä‚¢‚½‚Æ‚µ‚Ä‚àA–{ƒ\ƒtƒgƒEƒFƒA‚ÌŽg—p‚É‚æ‚Á‚Ä”­¶‚µ‚½i‘ã‘Ö•i‚Ü‚½‚Í‘ã—pƒT
---  [ƒrƒX‚Ì’²’BAŽg—p‚Ì‘rŽ¸Aƒf[ƒ^‚Ì‘rŽ¸A—˜‰v‚Ì‘rŽ¸A‹Æ–±‚Ì’†’f‚àŠÜ‚ßA‚Ü‚½‚»
---  ‚ê‚ÉŒÀ’è‚³‚ê‚È‚¢j’¼Ú‘¹ŠQAŠÔÚ‘¹ŠQA‹ô”­“I‚È‘¹ŠQA“Á•Ê‘¹ŠQA’¦”±“I‘¹ŠQA‚Ü
---  ‚½‚ÍŒ‹‰Ê‘¹ŠQ‚É‚Â‚¢‚ÄAˆêØÓ”C‚ð•‰‚í‚È‚¢‚à‚Ì‚Æ‚µ‚Ü‚·B
+--  æœ¬ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã¯ã€è‘—ä½œæ¨©è€…ã«ã‚ˆã£ã¦ã€Œç¾çŠ¶ã®ã¾ã¾ã€æä¾›ã•ã‚Œã¦ã„ã¾ã™ã€‚è‘—ä½œæ¨©è€…ã¯ã€
+--  ç‰¹å®šç›®çš„ã¸ã®é©åˆæ€§ã®ä¿è¨¼ã€å•†å“æ€§ã®ä¿è¨¼ã€ã¾ãŸãã‚Œã«é™å®šã•ã‚Œãªã„ã€ã„ã‹ãªã‚‹æ˜Žç¤º
+--  çš„ã‚‚ã—ãã¯æš—é»™ãªä¿è¨¼è²¬ä»»ã‚‚è² ã„ã¾ã›ã‚“ã€‚è‘—ä½œæ¨©è€…ã¯ã€äº‹ç”±ã®ã„ã‹ã‚“ã‚’å•ã‚ãšã€æå®³
+--  ç™ºç”Ÿã®åŽŸå› ã„ã‹ã‚“ã‚’å•ã‚ãšã€ã‹ã¤è²¬ä»»ã®æ ¹æ‹ ãŒå¥‘ç´„ã§ã‚ã‚‹ã‹åŽ³æ ¼è²¬ä»»ã§ã‚ã‚‹ã‹ï¼ˆéŽå¤±
+--  ãã®ä»–ã®ï¼‰ä¸æ³•è¡Œç‚ºã§ã‚ã‚‹ã‹ã‚’å•ã‚ãšã€ä»®ã«ãã®ã‚ˆã†ãªæå®³ãŒç™ºç”Ÿã™ã‚‹å¯èƒ½æ€§ã‚’çŸ¥ã‚‰
+--  ã•ã‚Œã¦ã„ãŸã¨ã—ã¦ã‚‚ã€æœ¬ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã®ä½¿ç”¨ã«ã‚ˆã£ã¦ç™ºç”Ÿã—ãŸï¼ˆä»£æ›¿å“ã¾ãŸã¯ä»£ç”¨ã‚µ
+--  ãƒ¼ãƒ“ã‚¹ã®èª¿é”ã€ä½¿ç”¨ã®å–ªå¤±ã€ãƒ‡ãƒ¼ã‚¿ã®å–ªå¤±ã€åˆ©ç›Šã®å–ªå¤±ã€æ¥­å‹™ã®ä¸­æ–­ã‚‚å«ã‚ã€ã¾ãŸã
+--  ã‚Œã«é™å®šã•ã‚Œãªã„ï¼‰ç›´æŽ¥æå®³ã€é–“æŽ¥æå®³ã€å¶ç™ºçš„ãªæå®³ã€ç‰¹åˆ¥æå®³ã€æ‡²ç½°çš„æå®³ã€ã¾
+--  ãŸã¯çµæžœæå®³ã«ã¤ã„ã¦ã€ä¸€åˆ‡è²¬ä»»ã‚’è² ã‚ãªã„ã‚‚ã®ã¨ã—ã¾ã™ã€‚
 --
 --  Note that above Japanese version license is the formal document.
 --  The following translation is only for reference.
@@ -58,7 +58,7 @@
 -------------------------------------------------------------------------------
 -- Memo
 --   Japanese comment lines are starts with "JP:".
---   JP: “ú–{Œê‚ÌƒRƒƒ“ƒgs‚Í JP:‚ð“ª‚É•t‚¯‚éŽ–‚É‚·‚é
+--   JP: æ—¥æœ¬èªžã®ã‚³ãƒ¡ãƒ³ãƒˆè¡Œã¯ JP:ã‚’é ­ã«ä»˜ã‘ã‚‹äº‹ã«ã™ã‚‹
 --
 -------------------------------------------------------------------------------
 -- Revision History
@@ -80,18 +80,18 @@
 --        odd  field  -> odd line  (even line is black)
 --
 -- 13th,October,2003 created by Kunihiko Ohnaka
--- JP: VDP‚ÌƒRƒA‚ÌŽÀ‘•‚Æ•\Ž¦ƒfƒoƒCƒX‚Ö‚Ìo—Í‚ð•Êƒ\[ƒX‚É‚µ‚½D
+-- JP: VDPã®ã‚³ã‚¢ã®å®Ÿè£…ã¨è¡¨ç¤ºãƒ‡ãƒã‚¤ã‚¹ã¸ã®å‡ºåŠ›ã‚’åˆ¥ã‚½ãƒ¼ã‚¹ã«ã—ãŸï¼Ž
 --
 -------------------------------------------------------------------------------
 -- Document
 --
--- JP: ESE-VDPƒRƒA(vdp.vhd)‚ª¶¬‚µ‚½ƒrƒfƒIM†‚ðAVGAƒ^ƒCƒ~ƒ“ƒO‚É
--- JP: •ÏŠ·‚·‚éƒAƒbƒvƒXƒLƒƒƒ“ƒRƒ“ƒo[ƒ^‚Å‚·B
--- JP: NTSC‚Í…•½“¯ŠúŽü”g”‚ª15.7KHzA‚’¼“¯ŠúŽü”g”‚ª60Hz‚Å‚·‚ªA
--- JP: VGA‚Ì…•½“¯ŠúŽü”g”‚Í31.5KHzA‚’¼“¯ŠúŽü”g”‚Í60Hz‚Å‚ ‚èA
--- JP: ƒ‰ƒCƒ“”‚¾‚¯‚ª‚Ù‚Ú”{‚É‚È‚Á‚½‚æ‚¤‚Èƒ^ƒCƒ~ƒ“ƒO‚É‚È‚è‚Ü‚·B
--- JP: ‚»‚±‚ÅAvdp‚ð ntscƒ‚[ƒh‚Å“®‚©‚µAŠeƒ‰ƒCƒ“‚ð”{‚Ì‘¬“x‚Å
--- JP: “ñ“x•`‰æ‚·‚é‚±‚Æ‚ÅƒXƒLƒƒƒ“ƒRƒ“ƒo[ƒg‚ðŽÀŒ»‚µ‚Ä‚¢‚Ü‚·B
+-- JP: ESE-VDPã‚³ã‚¢(vdp.vhd)ãŒç”Ÿæˆã—ãŸãƒ“ãƒ‡ã‚ªä¿¡å·ã‚’ã€VGAã‚¿ã‚¤ãƒŸãƒ³ã‚°ã«
+-- JP: å¤‰æ›ã™ã‚‹ã‚¢ãƒƒãƒ—ã‚¹ã‚­ãƒ£ãƒ³ã‚³ãƒ³ãƒãƒ¼ã‚¿ã§ã™ã€‚
+-- JP: NTSCã¯æ°´å¹³åŒæœŸå‘¨æ³¢æ•°ãŒ15.7KHzã€åž‚ç›´åŒæœŸå‘¨æ³¢æ•°ãŒ60Hzã§ã™ãŒã€
+-- JP: VGAã®æ°´å¹³åŒæœŸå‘¨æ³¢æ•°ã¯31.5KHzã€åž‚ç›´åŒæœŸå‘¨æ³¢æ•°ã¯60Hzã§ã‚ã‚Šã€
+-- JP: ãƒ©ã‚¤ãƒ³æ•°ã ã‘ãŒã»ã¼å€ã«ãªã£ãŸã‚ˆã†ãªã‚¿ã‚¤ãƒŸãƒ³ã‚°ã«ãªã‚Šã¾ã™ã€‚
+-- JP: ãã“ã§ã€vdpã‚’ ntscãƒ¢ãƒ¼ãƒ‰ã§å‹•ã‹ã—ã€å„ãƒ©ã‚¤ãƒ³ã‚’å€ã®é€Ÿåº¦ã§
+-- JP: äºŒåº¦æç”»ã™ã‚‹ã“ã¨ã§ã‚¹ã‚­ãƒ£ãƒ³ã‚³ãƒ³ãƒãƒ¼ãƒˆã‚’å®Ÿç¾ã—ã¦ã„ã¾ã™ã€‚
 --
 
 LIBRARY IEEE;
@@ -112,7 +112,7 @@ ENTITY VDP_VGA IS
         HCOUNTERIN      : IN    STD_LOGIC_VECTOR(10 DOWNTO 0);
         VCOUNTERIN      : IN    STD_LOGIC_VECTOR(10 DOWNTO 0);
         -- MODE
-        PALMODE         : IN    STD_LOGIC;  -- caro
+        PALMODE         : IN    STD_LOGIC; -- caro
         INTERLACEMODE   : IN    STD_LOGIC;
         LEGACY_VGA      : IN    STD_LOGIC;
         -- VIDEO OUTPUT
@@ -209,8 +209,8 @@ BEGIN
                    (VCOUNTERIN > 524 + 38 + DISP_START_Y AND VCOUNTERIN < 524 + 38 + DISP_START_Y + PRB_HEIGHT) OR
                    (VCOUNTERIN > 524 + 526 - PRB_HEIGHT) )THEN
                 -- PIXEL RATIO 1:1 (VGA MODE, 60HZ, NOT INTERLACED)
---              IF( EVENODD = '0' )THEN                                         -- PLOT FROM TOP-RIGHT
-                IF( EVENODD = '1' )THEN                                         -- PLOT FROM TOP-LEFT
+                IF( EVENODD = '0' )THEN                                         -- PLOT FROM TOP-RIGHT
+--              IF( EVENODD = '1' )THEN                                         -- PLOT FROM TOP-LEFT
                     DISP_START_X := BASE_LEFT_X + CONV_INTEGER(NOT RATIOMODE);  -- 35 TO 41
                 ELSE
                     DISP_START_X := RIGHT_X;                                    -- 106
@@ -238,35 +238,36 @@ BEGIN
     -- GENERATE V-SYNC SIGNAL
     -- THE VIDEOVSIN_N SIGNAL IS NOT USED
     PROCESS( RESET, CLK21M )
+        CONSTANT CENTER_Y       : INTEGER := 12;                                -- based on HDMI AV output
     BEGIN
         IF( RESET = '1' )THEN
             VIDEOVSOUT_N <= '1';
         ELSIF( CLK21M'EVENT AND CLK21M = '1' )THEN
             IF ( PALMODE = '0' ) THEN -- caro
                 IF( INTERLACEMODE = '0' ) THEN
-                    IF( (VCOUNTERIN = 3*2) OR (VCOUNTERIN = 524 + 3*2) )THEN
+                    IF( (VCOUNTERIN = 3*2 + CENTER_Y) OR (VCOUNTERIN = 524 + 3*2 + CENTER_Y) )THEN
                         VIDEOVSOUT_N <= '0';
-                    ELSIF( (VCOUNTERIN = 6*2) OR (VCOUNTERIN = 524 + 6*2) )THEN
+                    ELSIF( (VCOUNTERIN = 6*2 + CENTER_Y) OR (VCOUNTERIN = 524 + 6*2 + CENTER_Y) )THEN
                         VIDEOVSOUT_N <= '1';
                     END IF;
                 ELSE
-                    IF( (VCOUNTERIN = 3*2) OR (VCOUNTERIN = 525 + 3*2) )THEN
+                    IF( (VCOUNTERIN = 3*2 + CENTER_Y) OR (VCOUNTERIN = 525 + 3*2 + CENTER_Y) )THEN
                         VIDEOVSOUT_N <= '0';
-                    ELSIF( (VCOUNTERIN = 6*2) OR (VCOUNTERIN = 525 + 6*2) )THEN
+                    ELSIF( (VCOUNTERIN = 6*2 + CENTER_Y) OR (VCOUNTERIN = 525 + 6*2 + CENTER_Y) )THEN
                         VIDEOVSOUT_N <= '1';
                     END IF;
                 END IF;
             ELSE
                 IF( INTERLACEMODE = '0' ) THEN
-                    IF( (VCOUNTERIN = 3*2) OR (VCOUNTERIN = 626 + 3*2) )THEN
+                    IF( (VCOUNTERIN = 3*2 + CENTER_Y + 6) OR (VCOUNTERIN = 626 + 3*2 + CENTER_Y + 6) )THEN
                         VIDEOVSOUT_N <= '0';
-                    ELSIF( (VCOUNTERIN = 6*2) OR (VCOUNTERIN = 626 + 6*2) )THEN
+                    ELSIF( (VCOUNTERIN = 6*2 + CENTER_Y + 6) OR (VCOUNTERIN = 626 + 6*2 + CENTER_Y + 6) )THEN
                         VIDEOVSOUT_N <= '1';
                     END IF;
                 ELSE
-                    IF( (VCOUNTERIN = 3*2) OR (VCOUNTERIN = 625 + 3*2) )THEN
+                    IF( (VCOUNTERIN = 3*2 + CENTER_Y + 6) OR (VCOUNTERIN = 625 + 3*2 + CENTER_Y + 6) )THEN
                         VIDEOVSOUT_N <= '0';
-                    ELSIF( (VCOUNTERIN = 6*2) OR (VCOUNTERIN = 625 + 6*2) )THEN
+                    ELSIF( (VCOUNTERIN = 6*2 + CENTER_Y + 6) OR (VCOUNTERIN = 625 + 6*2 + CENTER_Y + 6) )THEN
                         VIDEOVSOUT_N <= '1';
                     END IF;
                 END IF;
@@ -299,7 +300,7 @@ BEGIN
                     ((HCOUNTERIN = DISP_START_X + (CLOCKS_PER_LINE/2)) AND INTERLACEMODE = '0') )THEN
                 VIDEOOUTX <= '1';
             ELSIF( (HCOUNTERIN = DISP_START_X + DISP_WIDTH) OR
-                       (HCOUNTERIN = DISP_START_X + DISP_WIDTH + (CLOCKS_PER_LINE/2)) )THEN
+                    (HCOUNTERIN = DISP_START_X + DISP_WIDTH + (CLOCKS_PER_LINE/2)) )THEN
                 VIDEOOUTX <= '0';
             END IF;
         END IF;

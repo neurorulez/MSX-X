@@ -1,40 +1,4 @@
-/*
-
-   Copyright (c) 2017-2020 - Victor Trucco
-
-	Ported to Neptuno by NeuroRulez
-	
-   All rights reserved
-
-   Redistribution and use in source and synthezised forms, with or without
-   modification, are permitted provided that the following conditions are met:
-
-   Redistributions of source code must retain the above copyright notice,
-   this list of conditions and the following disclaimer.
-
-   Redistributions in synthesized form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-
-   Neither the name of the author nor the names of other contributors may
-   be used to endorse or promote products derived from this software without
-   specific prior written permission.
-
-   THIS CODE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-   PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE
-   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-   POSSIBILITY OF SUCH DAMAGE.
-
-   You are responsible for any legal issues arising from your use of this code.
-
-*///============================================================================
+///============================================================================
 //  MSX top level for MiST
 //
 //  This program is free software; you can redistribute it and/or modify it
@@ -55,7 +19,7 @@
 //============================================================================
 //
 //  Multicore 2+ Top by Victor Trucco
-//
+//  Ported to Neptuno by NeuroRulez
 //============================================================================
 
 `default_nettype none
@@ -241,11 +205,11 @@ always @(posedge clk_sys) begin // Bit1: 0=VGA/1=RGB
     reset <= resetW;
     //dipsw <= {1'b0,1'b0,2'b00,1'b0,1'b0,1'b0,1'b1};//{1'b0, ~status[6], ~status[5], status[4], status[3], ~status[1] & status[8], status[1], ~status[2]};
 	 dipsw <= {1'b0, ~status[6], ~status[5], status[4], status[3], ~status[1] & status[8], status[1], ~status[2]};
-    audio_li <= audio_l;
-    if (status[9]) begin
-        audio_ri <= audio_r;
-    end
-        else audio_ri<= audio_l;
+ //   audio_li <= audio_l;
+ //   if (status[9]) begin
+ //       audio_ri <= audio_r;
+ //   end
+ //       else audio_ri<= audio_l;
 
     if (reset)
         clock_div_q <= 6'd0;
@@ -379,6 +343,10 @@ wire  [9:0] audioPSG;
 wire [15:0] audioPCM;
 wire  [7:0] audioTRPCM;
 wire [15:0] audioOPL3;
+wire [10:0] audioTAPE;
+
+//Falta por sumar OPL3 y TAPE en fm o en pcm depende de si es signed o unsigned... a probar.
+//el TAPE hay que sumarlo si el status[9] es 1 y el OPL3 si el status[7] es 1
 
 wire [16:0] pcm   = {audioPCM[15], audioPCM} + {audioTRPCM[7], audioTRPCM, 8'd0};
 wire [15:0] fm    = {audioOPLL, 2'b00} + {1'b0, audioPSG, 5'b00000};
@@ -433,17 +401,15 @@ emsx_top emsx
         .pVideoVS_n (VSync),    // VSync(RGB15K, VGA31K)
 
         .CmtIn      (EAR),
-        .pDac_SL    (audio_l),
-        .pDac_SR    (audio_r),
-
-        .osd_o      (),
+        .pDac_SL    (),         //Generamos el audio fuera del modulo principal
+        .pDac_SR    (), 
 		  
         .pAudioPSG   (audioPSG),
         .pAudioOPLL  (audioOPLL),
         .pAudioPCM   (audioPCM), 
         .pAudioTRPCM (audioTRPCM), 
 		  .pAudioOPL3  (audioOPL3),  
-
+		  .pAudioTAPE  (audioTAPE),  
 		  
         .opl3_enabled ( ~status[7] ),
         .slot0_exp  ( ~status[13] ),
@@ -487,24 +453,18 @@ wire [5:0] osd_r_o, osd_g_o, osd_b_o;
          .osd_enable  ( )
      );
 
-assign AUDIO_L = audio_li[0];
-assign AUDIO_R = audio_ri[0];
-/*
+
 //////////////////   AUDIO   //////////////////
-dac #(6) dac_l
+wire audio_deltasigma;
+esepwm #(15) dac
 (
-    .clk_i(clk_sys),
-    .res_n_i(1'b1),
-    .dac_i(audio_li),
-    .dac_o(AUDIO_L)
+    .clk(clk_sys),
+    .reset(reset),
+    .DACin(dac_out),
+    .DACout(audio_deltasigma)
 );
 
-dac #(6) dac_r
-(
-    .clk_i(clk_sys),
-    .res_n_i(1'b1),
-    .dac_i(audio_ri),
-    .dac_o(AUDIO_R)
-);
-*/
+assign AUDIO_R = audio_deltasigma;
+assign AUDIO_L = audio_deltasigma;
+
 endmodule

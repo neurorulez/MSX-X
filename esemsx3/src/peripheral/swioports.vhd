@@ -1,40 +1,4 @@
 --
--- Multicore 2 / Multicore 2+
---
--- Copyright (c) 2017-2020 - Victor Trucco
---
--- All rights reserved
---
--- Redistribution and use in source and synthezised forms, with or without
--- modification, are permitted provided that the following conditions are met:
---
--- Redistributions of source code must retain the above copyright notice,
--- this list of conditions and the following disclaimer.
---
--- Redistributions in synthesized form must reproduce the above copyright
--- notice, this list of conditions and the following disclaimer in the
--- documentation and/or other materials provided with the distribution.
---
--- Neither the name of the author nor the names of other contributors may
--- be used to endorse or promote products derived from this software without
--- specific prior written permission.
---
--- THIS CODE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
--- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
--- THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
--- PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE
--- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
--- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
--- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
--- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
--- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
--- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
--- POSSIBILITY OF SUCH DAMAGE.
---
--- You are responsible for any legal issues arising from your use of this code.
---
-        
---
 -- swioports.vhd
 --   Switched I/O ports ($40-$4F)
 --   Revision 9
@@ -146,8 +110,7 @@ entity switched_io_ports is
         iSlt1_linear    : inout std_logic;                                  -- Internal Slot1 Linear    :   0=Disabled, 1=Enabled
         iSlt2_linear    : inout std_logic;                                  -- Internal Slot2 Linear    :   0=Disabled, 1=Enabled
         Slot0_req       : inout std_logic;                                  -- Slot0 Primary Mode req   :   Warm Reset is necessary to complete the request
-        Slot0Mode       : inout std_logic;                                  -- Current Slot0 state      :   0=Primary, 1=Expanded
-        KbdLayout       : inout std_logic_vector(1 downto 0)
+        Slot0Mode       : inout std_logic                                   -- Current Slot0 state      :   0=Primary, 1=Expanded
     );
 end switched_io_ports;
 
@@ -157,7 +120,7 @@ architecture RTL of switched_io_ports is
 
     -- 'OCM-PLD' version number (x \ 10).(y mod 10).(z[0~3])                -- OCM-PLD version 0.0(.0) ~ 25.5(.3)
     constant ocm_pld_xy : std_logic_vector(  7 downto 0 ) := "00100110";    -- 38
-    constant ocm_pld_z  : std_logic_vector(  1 downto 0 ) :=       "00";    -- 0
+    constant ocm_pld_z  : std_logic_vector(  1 downto 0 ) :=       "01";    -- 1
 
     -- 'Switched I/O Ports' revision number (0-31)                          -- Switched I/O ports Revision 0 ~ 31
     constant swioRevNr  : std_logic_vector(  4 downto 0 ) :=    "01001";    -- 9
@@ -210,7 +173,7 @@ begin
 
 --  =============================================================================================================
     DefKmap     <=  '1';                        -- Default Keyboard     0=Japanese Layout   1=Non-Japanese Layout
-    ZemmixNeo   <=  '1';                        -- Machine Type         0=1chipMSX          1=Zemmix Neo
+    ZemmixNeo   <=  '0';                        -- Machine Type         0=1chipMSX          1=Zemmix Neo
 --  =============================================================================================================
 
     process( reset, clk21m )
@@ -226,7 +189,7 @@ begin
                     -- Cold Reset
                     OFFSET_Y        :=  "0010011";          -- Default Vertical Offset
 --                  io41_id212_n    <=  "00000000";         -- Smart Commands will be zero at 1st boot
-                    io42_id212      <=  ff_dip_req;  -- Virtual DIP-SW are DIP-SW
+                    io42_id212      <=  ff_dip_req;         -- Virtual DIP-SW are DIP-SW
                     ff_dip_ack      <=  ff_dip_req;         -- Sync to its req
                     io43_id212      <=  "00X00000";         -- Lock Mask is Full Unlocked
                     io44_id212      <=  "00000000";         -- Lights Mask is Full Off
@@ -373,7 +336,7 @@ begin
                                 end if;
                             end if;
                             if( io43_id212(0) = '0' )then                       -- BIT[0]=0     of  Lock Mask
-                                if( Fkeys(6) /= vFKeys(6) )then                 -- F8          is  TURBO selector
+                                if( Fkeys(0) /= vFKeys(0) )then                 -- F12          is  TURBO selector
                                     if( io41_id008_n = '1' and io42_id212(0) = '0' )then
                                         io41_id008_n    <=  '0';                -- 3.58MHz      >>  5.37MHz
                                     elsif( io41_id008_n = '0' and io42_id212(0) = '0' )then
@@ -490,7 +453,7 @@ begin
                                 end if;
                             end if;
                             if( io43_id212(3) = '0' )then                       -- BIT[3]=0     of  Lock Mask
-                                if( Fkeys(6) /= vFKeys(6) )then                 -- SHIFT+F8    is  SLOT1 selector
+                                if( Fkeys(0) /= vFKeys(0) )then                 -- SHIFT+F12    is  SLOT1 selector
                                     io42_id212(3)   <=  not io42_id212(3);
                                     iSlt1_linear    <=  '0';
                                 end if;                                         -- EXTERNAL SLOT1   >> <<   INTERNAL SCC-I(A)

@@ -1,5 +1,5 @@
 ;
-; iplrom.vhd
+; iplrom*.*
 ;   initial program loader for Cyclone & EPCS (Altera)
 ;   Revision 2.00
 ;
@@ -34,19 +34,19 @@
 ;
 ; Coded in TWZ'CA3 w/ TASM80 v3.2ud for OCM-PLD Pack v3.4 or later
 ;
-; SDHC support by yuukun-OKEI, thanks to MAX
+; SDHC support by Yuukun-OKEI, thanks to MAX
 ;
 
             .org        $FC00
 ;----------------------------------------
 
-SDBIOS_LEN: .equ        32                 ; SDBIOS lenght: 32=512 kB, 24=384 kB
+SDBIOS_LEN: .equ        32                 ; SDBIOS lenght: 24=384 kB, 32=512 kB
 ;----------------------------------------
 
 begin:                                     ; ### from low memory ($0000) ###
             di
 ; self copy
-            ld          bc, end - begin    ; bc = ipl-rom file size (bytes)
+            ld          bc, end-begin      ; bc = ipl-rom file size (bytes)
             ld          de, begin          ; de = RAM start adr
             ld          h, e               ; ld hl, $0000
             ld          l, e               ; hl = IPL-ROM start adr
@@ -70,10 +70,10 @@ init_stack:                                ; ### to high memory ($FCXX) ###
             ld          a, $80
             ld          ($7000), a
             ld          hl, ($8000)
-            ld          de, 'B'*256 + 'A'
+            ld          de, 'B'*256+'A'
             sbc         hl, de
             jp          z, init_sys        ; yes 'AB'
-; check SD-CARD
+; check SD CARD
             ld          a, $40
             ld          ($6000), a
 
@@ -85,11 +85,11 @@ init_stack:                                ; ### to high memory ($FCXX) ###
 load_sd:
 ;----------------------------------------
 ;           jp          load_epcs          ; loading BIOS from EPCS only
-            call        read_sd            ; read from SD-CARD
+            call        read_sd            ; read from SD CARD
 ;----------------------------------------
 
-            jr          c, load_epcs       ; loading BIOS from SD-CARD or EPCS (default)
-;           jr          c, load_sd         ; loading BIOS from SD-CARD only
+            jr          c, load_epcs       ; loading BIOS from SD CARD or EPCS (default)
+;           jr          c, load_sd         ; loading BIOS from SD CARD only
 ; read OK => CY = 0
 ;----------------------------------------
 
@@ -105,7 +105,7 @@ test_fat:
             add         a, (hl)            ; 'A'
             inc         hl
             add         a, (hl)            ; 'T'
-            sub         'F' + 'A' + 'T'
+            sub         'F'+'A'+'T'
             dec         hl
             jr          nz, loop_f
 ; yes marker 'FAT'
@@ -120,7 +120,7 @@ exit_fat:
 
 ; test MBR, search partition
             ld          b, $04             ; partitions to find
-            ld          hl, $C000 + $01C6  ; sector offset
+            ld          hl, $C000+$01C6    ; sector offset
 find_part:
             push        hl
             ld          e, (hl)
@@ -156,7 +156,7 @@ exit_mbr:
 
 load_epcs:
             ld          hl, read_epcs      ; get_data <= call read_epcs
-            ld          (get_data + 1), hl
+            ld          (get_data+1), hl
 ;----------------------------------------
 
 ; load BIOS from EPCS
@@ -167,36 +167,36 @@ load_epcs:
             ld          de, $01A0          ; EPCS start adr = 34000h / 512 <304k
 ;----------------------------------------
             ld          a, $80             ; ESE-RAM init adr
-            ld          b, 4 -1            ; DISK lenght -1
+            ld          b, 4-1             ; DISK lenght -1
             call        load_blocks        ;  4 * 16 kB [DATA]
-            ld          b, 4 -1            ; FILL ZERO lenght -1
+            ld          b, 4-1             ; FILL ZERO lenght -1
             call        load_zero_16k      ; +4 * 16 kB [ZERO]
             call        load_blocks        ; +1 * 16 kB [DATA] <= MAIN(1)
             call        set_f4_device      ; set F4 normal or inverted
-            ld          b, 6 -1            ; MAIN(2)+XBAS+MUS+SUB+KNJ lenght -1
+            ld          b, 6-1             ; MAIN(2)+XBAS+MUS+SUB+KNJ lenght -1
             call        load_blocks        ; +7 * 16 kB [DATA]
 ;----------------------------------------
 ;           call        load_blocks        ; +1 * 16 kB [DATA] <= HEX-FILE 320k
             call        load_free_16k      ; +1 * 16 kB [FREE] <= HEX-FILE 304k
 ;----------------------------------------
-            ld          b, 8 -1            ; JIS1 lenght -1
+            ld          b, 8-1             ; JIS1 lenght -1
             call        load_blocks        ; +8 * 16 kB [DATA]
             jr          set_jis2_ena       ; a = $b0 (384 kB) JIS2 enabler = Off
 ;----------------------------------------
 
-; test BIOS on SD-CARD
+; test BIOS on SD CARD
 find_ab:
             ld          ix, $C000          ; PBR buffer
 
-            ld          l, (ix + $0E)      ; number of reserved
-            ld          h, (ix + $0F)      ; sectors
+            ld          l, (ix+$0E)        ; number of reserved
+            ld          h, (ix+$0F)        ; sectors
             ld          a, c
             add         hl, de
             adc         a, $00
             ld          c, a
 
-            ld          e, (ix + $11)      ; number of root
-            ld          d, (ix + $12)      ; entries
+            ld          e, (ix+$11)        ; number of root
+            ld          d, (ix+$12)        ; entries
             ld          a, e
             and         $0F
             ld          b, $04
@@ -211,10 +211,10 @@ loop1_ab:
             inc         de
 parse_ab:
             push        de
-            ld          b, (ix + $10)      ; FAT type
+            ld          b, (ix+$10)        ; FAT type
 
-            ld          e, (ix + $16)      ; number of sectors
-            ld          d, (ix + $17)      ; per FAT
+            ld          e, (ix+$16)        ; number of sectors
+            ld          d, (ix+$17)        ; per FAT
             ld          a, c
 loop2_ab:
             add         hl, de
@@ -234,7 +234,7 @@ loop2_ab:
             jr          c, exit_ab         ; error
 
             ld          hl, ($C000)        ; first two bytes
-            ld          de, 'B'*256 + 'A'  ; 'AB' marker of Disk-ROM
+            ld          de, 'B'*256+'A'    ; 'AB' marker of Disk-ROM
             or          a                  ; CY = 0
             sbc         hl, de             ; compare
             pop         bc
@@ -248,13 +248,13 @@ exit_ab:
 ; test OK
 ;----------------------------------------
 
-; load BIOS from SD-CARD
+; load BIOS from SD CARD
             ld          a, $80
             ld          b, 9               ;   9 * 16 kB <= DISK+MAIN(1)
             call        load_erm
             call        set_f4_device      ; set F4 normal or inverted
 test_sdbios_len:
-            ld          b, SDBIOS_LEN - 9  ; +23 * 16k <= MAIN(2)+OTHERS
+            ld          b, SDBIOS_LEN-9    ; (len-9) * 16k <= MAIN(2)+OTHERS
             call        load_erm
             cpl                            ; a = $b0 (384 kB) JIS2 enabler = Off
             rlca                           ; a = $c0 (512 kB) JIS2 enabler = On
@@ -305,13 +305,13 @@ data_r16:                                  ; optimized for otir
 ; F4 device
 set_f4_device:
             ex          af, af'
-            ld          a, ($8000 + $002D) ; MSX-ID adr = $002D of MAIN-ROM
+            ld          a, ($8000+$002D)   ; MSX-ID adr = $002D of MAIN-ROM
             sub         $03                ; MSX-ID = 3 is MSXtR
             out         ($4F), a           ; $0X = normal, $FX = inverted
             out         ($F4), a           ; force MSX logo = on
             rrca                           ; free16k ($FF) when MSX-ID = 0, 1, 2
             or          $C9                ; no-logo ($C9) when MSX-ID = 3, 4, 5
-            ld          (fill_free_16k + 1), a
+            ld          (fill_free_16k+1), a
             ex          af, af'
             ret
 ;----------------------------------------
@@ -501,7 +501,7 @@ _Z0027:
             pop         hl
             ret         c                  ; error
 
-; read from SD-CARD
+; read from SD CARD
 read_sd:
 _Z0001:
             push        hl

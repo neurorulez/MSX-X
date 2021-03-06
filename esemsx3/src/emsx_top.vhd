@@ -1,39 +1,3 @@
---
--- Multicore 2 / Multicore 2+
---
--- Copyright (c) 2017-2020 - Victor Trucco
---
--- All rights reserved
---
--- Redistribution and use in source and synthezised forms, with or without
--- modification, are permitted provided that the following conditions are met:
---
--- Redistributions of source code must retain the above copyright notice,
--- this list of conditions and the following disclaimer.
---
--- Redistributions in synthesized form must reproduce the above copyright
--- notice, this list of conditions and the following disclaimer in the
--- documentation and/or other materials provided with the distribution.
---
--- Neither the name of the author nor the names of other contributors may
--- be used to endorse or promote products derived from this software without
--- specific prior written permission.
---
--- THIS CODE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
--- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
--- THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
--- PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE
--- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
--- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
--- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
--- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
--- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
--- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
--- POSSIBILITY OF SUCH DAMAGE.
---
--- You are responsible for any legal issues arising from your use of this code.
---
-        
 ----
 -- emsx_top.vhd
 --   ESE MSX-SYSTEM3 / MSX clone on a Cyclone FPGA (ALTERA)
@@ -174,14 +138,13 @@ entity emsx_top is
         pIopRsv19       : in    std_logic;
         pIopRsv20       : in    std_logic;
         pIopRsv21       : in    std_logic;
-
-        osd_o           : out   std_logic_vector(  7 downto 0);
 		  
         pAudioPSG       : out   std_logic_vector(  9 downto 0 );
         pAudioOPLL      : out   std_logic_vector( 13 downto 0 );
         pAudioPCM       : out   std_logic_vector( 15 downto 0 );
         pAudioTRPCM     : out   std_logic_vector(  7 downto 0 );
 		  pAudioOPL3      : out   std_logic_vector( 15 downto 0 );
+		  pAudioTAPE      : out   std_logic_vector( 10 downto 0 );
 		  
         opl3_enabled    : in std_logic;
         slot0_exp       : in std_logic;
@@ -308,7 +271,7 @@ architecture RTL of emsx_top is
             clkena      : in     std_logic;
 
             Kmap        : in     std_logic;
-            Kmap_layout   : in     std_logic_vector(  1 downto 0 );
+            KLayout     : in     std_logic_vector(  1 downto 0 );
 
             Caps        : inout  std_logic;
             Kana        : inout  std_logic;
@@ -324,8 +287,7 @@ architecture RTL of emsx_top is
             PpiPortC    : in     std_logic_vector(  7 downto 0 );
             pKeyX       : out    std_logic_vector(  7 downto 0 );
 
-            CmtScro     : inout  std_logic;
-            osd_o       : out std_logic_vector(7 downto 0)
+            CmtScro     : inout  std_logic
         );
     end component;
     component rtc
@@ -640,8 +602,7 @@ architecture RTL of emsx_top is
             iSlt1_linear    : inout std_logic;                                  -- Internal Slot1 Linear    :   0=Disabled, 1=Enabled
             iSlt2_linear    : inout std_logic;                                  -- Internal Slot2 Linear    :   0=Disabled, 1=Enabled
             Slot0_req       : inout std_logic;                                  -- Slot0 Primary Mode req   :   Warm Reset is necessary to complete the request
-            Slot0Mode       : inout std_logic;                                   -- Current Slot0 state      :   0=Primary, 1=Expanded
-            kbdLayout       : inout std_logic_vector( 1 downto 0 )
+            Slot0Mode       : inout std_logic                                   -- Current Slot0 state      :   0=Primary, 1=Expanded
         );
     end component;
 
@@ -2127,143 +2088,13 @@ begin
         end if;
     end process;
 
-    -- mixer (pipe lined)
-    u_mul: scc_mix_mul
-    port map (
-        a   => ff_prescc        ,           -- 16bits signed
-        b   => m_SccVol         ,           --  3bits unsigned
-        c   => w_scc                        -- 19bits signed
-    );
-
-    process( clk21m )
-        constant h_ramp : integer := -1;                        -- h_ramp selector -4 to 0 <= lv1-3, lv2-4, lv3-5, lv4-6 (in use), lv5-7
-        constant m_ramp : integer :=  2;                        -- m_ramp selector -1 to 3 <= lv1-3, lv2-4, lv3-5, lv4-6 (in use), lv5-7
-        constant l_ramp : integer :=  6;                        -- l_ramp <= level 1-7 (steps 3, 4, 5, 6, 7, 8, 9)
-        constant h_thrd : integer := 12;                        -- h_ramp threshold (steps 13, 14, 15)
-        constant m_thrd : integer :=  9;                        -- m_ramp threshold (steps 10, 11, 12)
-        constant x_thrd : integer :=  1;                        -- extra threshold (PsgVol goes up one level when x_thrd = 1)
-        variable c_Psg  : std_logic_vector(  3 downto  0 );     -- combine PsgVol and MstrVol
-        variable c_Scc  : std_logic_vector(  3 downto  0 );     -- combine SccVol and MstrVol
-        variable c_Opll : std_logic_vector(  3 downto  0 );     -- combine OpllVol and MstrVol
-        variable chPsg  : std_logic_vector( ff_prepsg'range );
-        variable chOpll : std_logic_vector( ff_pre_dacin'range );
-        variable opl3_vol   : std_logic_vector(  2 downto  0 );
-        variable tr_pcm_vol : std_logic_vector(  2 downto  0 );
-    begin
-        if( clk21m'event and clk21m = '1' )then
-
-            -- amplitude ramp of the PSG (full range)
-            ff_prepsg <= ("0" & PsgAmp(9 downto 2)) + (KeyClick & "00000");
-            c_Psg       := ("1" & PsgVol) - ("0" & MstrVol);
---          if( PsgVol = "000" or MstrVol = "111" or SdPaus = '1' )then             -- dismissed
-            if( PsgVol = "000" or MstrVol = "111" )then
-                ff_psg      <= ( others => '0' );
-            elsif( c_Psg > h_thrd )then
-                chPsg       := ff_prepsg;
-                ff_psg      <= "0" & ("0" & (chPsg * (PsgVol - MstrVol + h_ramp + x_thrd)) + chPsg( chPsg'high - 4 downto  0 )) & "00";
-            elsif( c_Psg > (m_thrd - x_thrd) )then
-                chPsg       := "0" & ff_prepsg( ff_prepsg'high downto 1 );
-                ff_psg      <= "0" & ("0" & (chPsg * (PsgVol - MstrVol + m_ramp + x_thrd)) + chPsg( chPsg'high - 4 downto  0 )) & "00";
-            else
-                chPsg       := "00" & ff_prepsg( ff_prepsg'high downto 2 );
-                ff_psg      <= "0" & ("0" & (chPsg * (PsgVol - MstrVol + l_ramp + x_thrd)) + chPsg( chPsg'high - 4 downto  0 )) & "00";
-            end if;
-            -- amplitude ramp of the SCC-I (full range)
-            ff_prescc   <= (Scc1AmpL(14) & Scc1AmpL) + (Scc2AmpL(14) & Scc2AmpL);
-            c_Scc       := ("1" & SccVol) - ("0" & MstrVol);
---          if( SccVol = "000" or MstrVol = "111" or SdPaus = '1' )then             -- dismissed
-            if( SccVol = "000" or MstrVol = "111" )then
-                m_SccVol    <= "000";
-                ff_scc      <= ( others => w_scc(18) );
-            elsif( c_Scc > h_thrd )then
-                m_SccVol    <= SccVol - MstrVol + h_ramp;
-                ff_scc      <= w_scc(18) & w_scc( 18 downto  4 );
-            elsif( c_Scc > m_thrd )then
-                m_SccVol    <= SccVol - MstrVol + m_ramp;
-                ff_scc      <= w_scc(18) & w_scc(18) & w_scc( 18 downto  5 );
-            else
-                m_SccVol    <= SccVol - MstrVol + l_ramp;
-                ff_scc      <= w_scc(18) & w_scc(18) & w_scc(18) & w_scc( 18 downto  6 );
-            end if;
-            -- amplitude ramp of the OPLL (full range)
-            c_Opll      := ("1" & OpllVol) - ("0" & MstrVol);
---          if( OpllVol = "000" or MstrVol = "111" or SdPaus = '1' )then            -- dismissed
-            if( OpllVol = "000" or MstrVol = "111" )then
-                ff_opll <= c_opll_offset;
-            elsif( OpllAmp < c_opll_zero )then
-                if( c_Opll > h_thrd )then
-                    chOpll   := ((c_opll_zero(13 downto 4) - OpllAmp(13 downto 4)) * (OpllVol - MstrVol + h_ramp)) & "000";
-                elsif( c_Opll > m_thrd )then
-                    chOpll   := "0" & ((c_opll_zero(13 downto 4) - OpllAmp(13 downto 4)) * (OpllVol - MstrVol + m_ramp)) & "00";
-                else
-                    chOpll   := "00" & ((c_opll_zero(13 downto 4) - OpllAmp(13 downto 4)) * (OpllVol - MstrVol + l_ramp)) & "0";
-                end if;
-                ff_opll <= c_opll_offset - (chOpll - chOpll( chOpll'high downto  3 ));
-            else
-                if( c_Opll > h_thrd )then
-                    chOpll   := ((OpllAmp(13 downto 4) - c_opll_zero(13 downto 4)) * (OpllVol - MstrVol + h_ramp)) & "000";
-                elsif( c_Opll > m_thrd )then
-                    chOpll   := "0" & ((OpllAmp(13 downto 4) - c_opll_zero(13 downto 4)) * (OpllVol - MstrVol + m_ramp)) & "00";
-                else
-                    chOpll   := "00" & ((OpllAmp(13 downto 4) - c_opll_zero(13 downto 4)) * (OpllVol - MstrVol + l_ramp)) & "0";
-                end if;
-                ff_opll <= c_opll_offset + (chOpll - chOpll( chOpll'high downto  3 ));
-            end if;
-
-            -- amplitude ramp of the OPL3 (mixer level equivalences: off, 4, 7 and 10 out of 13)
-            opl3_vol    := MstrVol;
-            case opl3_vol is
-                when "000" | "001"         =>
-                    ff_opl3(           11 downto  0 ) <= opl3_sound_s( 15 downto  4 );
-                    ff_opl3( ff_opl3'high downto 12 ) <= (others => opl3_sound_s(15));
-                when "010" | "011" | "100" =>
-                    ff_opl3(           10 downto  0 ) <= opl3_sound_s( 15 downto  5 );
-                    ff_opl3( ff_opl3'high downto 11 ) <= (others => opl3_sound_s(15));
-                when "101" | "110"         =>
-                    ff_opl3(            9 downto  0 ) <= opl3_sound_s( 15 downto  6 );
-                    ff_opl3( ff_opl3'high downto 10 ) <= (others => opl3_sound_s(15));
-                when others                =>
-                    ff_opl3                           <= (others => opl3_sound_s(15));
-            end case;
-
-            -- amplitude ramp of the turboR PCM (mixer level equivalences: off, 4, 7 and 10 out of 13)
-            tr_pcm_vol  := MstrVol;
-            case tr_pcm_vol is
-                when "000" | "001"         =>
-                    ff_tr_pcm(             10 downto  0 ) <= tr_pcm_wave_out & "000";
-                    ff_tr_pcm( ff_tr_pcm'high downto 11 ) <= (others => tr_pcm_wave_out(7));
-                when "010" | "011" | "100" =>
-                    ff_tr_pcm(              9 downto  0 ) <= tr_pcm_wave_out(  7 downto  1 ) & "000";
-                    ff_tr_pcm( ff_tr_pcm'high downto 10 ) <= (others => tr_pcm_wave_out(7));
-                when "101" | "110"         =>
-                    ff_tr_pcm(              8 downto  0 ) <= tr_pcm_wave_out(  7 downto  2 ) & "000";
-                    ff_tr_pcm( ff_tr_pcm'high downto  9 ) <= (others => tr_pcm_wave_out(7));
-                when others                =>
-                    ff_tr_pcm                             <= (others => tr_pcm_wave_out(7));
-            end case;
-        end if;
-    end process;
-
-    process( clk21m )
-    begin
-        if( clk21m'event and clk21m = '1' )then
-              -- ff_pre_dacin assignment
-            ff_pre_dacin <= (not ff_psg) + ff_scc + ff_opll + ff_tr_pcm + ff_opl3;
-
-            -- amplitude limiter
-            case ff_pre_dacin( ff_pre_dacin'high downto ff_pre_dacin'high - 2 ) is
-                when "100" => DACin <= ff_pre_dacin( ff_pre_dacin'high ) & ff_pre_dacin( ff_pre_dacin'high - 3 downto 0 );
-                when "011" => DACin <= ff_pre_dacin( ff_pre_dacin'high ) & ff_pre_dacin( ff_pre_dacin'high - 3 downto 0 );
-                when others => DACin <= (others => ff_pre_dacin( ff_pre_dacin'high ));
-            end case;
-
---          DACin <= ff_pcm;        -- test PCM
-        end if;
-    end process;
-
-    pDac_SL   <=  "ZZZZZZ"  when( pseudoStereo = '1' and CmtScro = '0' )else
-                  DACout & "ZZZZ" & DACout;                     -- the DACout setting is used to balance the input line of external slots
-						
+	 pAudioPSG  <= ("0" & PsgAmp(9 downto 1)) + (KeyClick & "00000");
+	 pAudioPCM  <= ((Scc1AmpL(14) & Scc1AmpL) + (Scc2AmpL(14) & Scc2AmpL));
+	 pAudioTRPCM <= tr_pcm_wave_out;
+	 pAudioOPLL <= OpllAmp;
+	 pAudioOPL3 <= opl3_sound_s;
+	 pAudioTAPE <= cmtIn & "0000000000";
+	 
     -- Cassette Magnetic Tape (CMT) interface
     pDac_SR(4) <= cmtIn;
 
@@ -2675,7 +2506,7 @@ begin
 
     U06 : entity work.eseps2
         port map(clk21m, reset, clkena, Kmap, Kmap_layout, Caps, Kana, Paus, Scro, Reso, Fkeys,
-                        pPs2Clk, pPs2Dat, PpiPortC, PpiPortB, CmtScro, osd_o);
+                        pPs2Clk, pPs2Dat, PpiPortC, PpiPortB, CmtScro);
 
     U07 : entity work.rtc
         port map(clk21m, reset, w_10Hz, RtcReq, open, wrt, adr, RtcDbi, dbo);
@@ -2772,8 +2603,8 @@ begin
         odata   => lpf5_wave
     );
 
-    U33: esepwm
-        generic map ( DAC_MSBI ) port map (clk21m, reset, lpf5_wave, DACout);
+--    U33: esepwm
+--        generic map ( DAC_MSBI ) port map (clk21m, reset, lpf5_wave, DACout);
 
     U34: system_timer
     port map (
@@ -2860,10 +2691,8 @@ begin
         legacy_sel      => legacy_sel       ,
             iSlt1_linear    => iSlt1_linear     ,
             iSlt2_linear    => iSlt2_linear     ,
-        Slot0_req       => Slot0_req        ,   -- here to reduce LEs
-        Slot0Mode       => slot0_s,          --Slot0Mode
-        KbdLayout       => Kmap_layout
-        
+        Slot0_req       => Slot0_req            ,   -- here to reduce LEs
+        Slot0Mode       => slot0_s          --Slot0Mode     
     );
 
     Slot0Mode <= slot0_s and slot0_exp;
@@ -2897,12 +2726,7 @@ begin
 --             '1' when( adr(  7 downto 1 ) = "0111110" and pSltIorq_n = '0' and pSltWr_n = '0'                        )else   -- OPLL ports 7C-7Dh via OPL3
                '0';
 
-	 --dac_out <= DACin & "00"; --lpf5_wave & "00";
-	 pAudioPSG  <= ("0" & PsgAmp(9 downto 1)) + (KeyClick & "00000");
-	 pAudioPCM  <= ((Scc1AmpL(14) & Scc1AmpL) + (Scc2AmpL(14) & Scc2AmpL));
-	 pAudioTRPCM <= tr_pcm_wave_out;
-	 pAudioOPLL <= OpllAmp;
-	 pAudioOPL3 <= opl3_sound_s;
+
 	 
     -- debug enabler 'SHIFT+PAUSE'
     process( clk21m )
