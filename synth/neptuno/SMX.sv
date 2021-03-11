@@ -460,7 +460,7 @@ esepwm #(15) dac
 (
     .clk(clk_sys),
     .reset(reset),
-    .DACin(dac_out),
+    .DACin({~dac_out[15],dac_out[14:0]}),
     .DACout(audio_deltasigma)
 );
 
