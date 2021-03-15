@@ -178,12 +178,12 @@ set_location_assignment PIN_AB14 -to LRCLK
 set_location_assignment PIN_AA15 -to SDIN
 
 # UART_PINS
-#set_location_assignment PIN_K21 -to UART_RX
-#set_location_assignment PIN_J21 -to UART_TX
+set_location_assignment PIN_K21 -to UART_RXD
+set_location_assignment PIN_J21 -to UART_TXD
 
 # UART WIFI
-set_location_assignment PIN_AB20 -to UART_RXD
-set_location_assignment PIN_AB16 -to UART_TXD
+#set_location_assignment PIN_AB20 -to UART_RXD
+#set_location_assignment PIN_AB16 -to UART_TXD
 
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to btn_n_i[4]
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to btn_n_i[3]
@@ -390,6 +390,11 @@ set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_PIPELINE=0" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_PIPELINE=0" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_COUNTER_PIPELINE=0" -section_id auto_signaltap_0
+#set_global_assignment -name QIP_FILE ../../esemsx3/src/cpu/T80.qip
+
+set_global_assignment -name VHDL_FILE ../../esemsx3/src/peripheral/fifo.vhd
+set_global_assignment -name VHDL_FILE ../../esemsx3/src/peripheral/wifi.vhd
+set_global_assignment -name VHDL_FILE ../../esemsx3/src/peripheral/uart.vhd
 set_global_assignment -name VERILOG_FILE "../../mist-modules/osd.v"
 set_global_assignment -name VERILOG_FILE "../../mist-modules/scanlines.v"
 set_global_assignment -name VERILOG_FILE "../../mist-modules/scandoubler.v"
@@ -398,11 +403,9 @@ set_global_assignment -name VERILOG_FILE "../../mist-modules/mist_video.v"
 set_global_assignment -name VERILOG_FILE ../../CtrlModule/modules/joydecoder_neptuno.v
 set_global_assignment -name QIP_FILE ../../CtrlModule/CtrlModule.qip
 set_global_assignment -name QIP_FILE ../../esemsx3/emsx.qip
-#set_global_assignment -name QIP_FILE ../../esemsx3/src/cpu/T80.qip
 set_global_assignment -name QIP_FILE ../../T80/T80.qip
-set_global_assignment -name QIP_FILE "../../SM-X/opl3/opl3.qip"
+set_global_assignment -name QIP_FILE ../../esemsx3/src/sound/opl3/opl3.qip
 set_global_assignment -name VERILOG_FILE "../../SM-X/peripheral/ps2_mouse.v"
-
 set_global_assignment -name SYSTEMVERILOG_FILE SMX.sv
 set_global_assignment -name QIP_FILE pll.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

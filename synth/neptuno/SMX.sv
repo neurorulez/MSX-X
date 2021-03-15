@@ -76,8 +76,8 @@ module MSX_X
 	 output wire	LRCLK,
 	 output wire	SDIN,
 
-	 input  wire	UART_RX,
-	 output wire	UART_TX,	 
+	 input  wire	UART_RXD,
+	 output wire	UART_TXD,	 
     // VGA
     output  [4:0] VGA_R,
     output  [4:0] VGA_G,
@@ -411,6 +411,8 @@ emsx_top emsx
 		  .pAudioOPL3  (audioOPL3),  
 		  .pAudioTAPE  (audioTAPE),  
 		  
+		  .esp_rx_o		(UART_TXD),
+		  .esp_tx_i		(UART_RXD),	  
         .opl3_enabled ( ~status[7] ),
         .slot0_exp  ( ~status[13] ),
         .kbd_layout ( {status[14], status[15]} )

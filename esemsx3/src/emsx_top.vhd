@@ -147,6 +147,9 @@ entity emsx_top is
 		  pAudioTAPE      : out   std_logic_vector( 10 downto 0 );
 		  
         opl3_enabled    : in std_logic;
+		  esp_rx_o			: out   std_logic	:= 'Z'; 
+		  esp_tx_i			: in    std_logic	:= 'Z';		  
+
         slot0_exp       : in std_logic;
         kbd_layout      : inout std_logic_vector(1 downto 0)
     );
@@ -1017,6 +1020,10 @@ architecture RTL of emsx_top is
     signal opl3_sound_s     : std_logic_vector( 15 downto 0 ) := (others => '0');
     signal opl3_ce          : std_logic := '0';
 
+  	 -- ESP
+	 signal esp_dout_s       : std_logic_vector(  7 downto 0 ) := (others=>'1');
+	 signal esp_wait_s		 : std_logic := '1';
+
 
 begin
 
@@ -1586,7 +1593,7 @@ begin
                 count := count - 1;
             end if;
 
-            if( (CpuM1_n = '0' and iCpuM1_n = '1') or pSltWait_n ='0' )then
+            if( (CpuM1_n = '0' and iCpuM1_n = '1') or pSltWait_n ='0' or esp_wait_s = '0')then
                 wait_n_s <= '0';
             elsif( count /= "0000" )then
                 wait_n_s <= '0';
@@ -1684,6 +1691,8 @@ begin
                 dlydbi <= portF4_bit7 & "1111111";
             elsif( mem = '0' and adr(  7 downto 3 ) = "11000" and opl3_enabled = '1' )then      -- OPL3 ports C0-C3h / C4-C7h
                 dlydbi <= opl3_dout_s;
+				elsif( mem = '0' and adr(  7 downto 1 ) = "0000011" )then                           -- ESP ports 06 and 07
+                dlydbi <= esp_dout_s;					 
             else
                 dlydbi <= (others => '1');
             end if;
@@ -2726,6 +2735,20 @@ begin
 --             '1' when( adr(  7 downto 1 ) = "0111110" and pSltIorq_n = '0' and pSltWr_n = '0'                        )else   -- OPLL ports 7C-7Dh via OPL3
                '0';
 
+	 uwifi: work.wifi
+	 port map(
+			clk_i	=> clk21m,
+			wait_o => esp_wait_s,
+			reset_i => pSltRst_n,
+			iorq_i => pSltIorq_n,
+			wrt_i	=> pSltWr_n,
+			rd_i => pSltRd_n,
+			tx_i => esp_tx_i,
+			rx_o => esp_rx_o,
+			adr_i => adr,
+			db_i => dbo,
+			db_o => esp_dout_s
+	);
 
 	 
     -- debug enabler 'SHIFT+PAUSE'
