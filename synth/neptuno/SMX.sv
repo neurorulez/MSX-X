@@ -79,9 +79,9 @@ module MSX_X
 	 input  wire	UART_RXD,
 	 output wire	UART_TXD,	 
     // VGA
-    output  [4:0] VGA_R,
-    output  [4:0] VGA_G,
-    output  [4:0] VGA_B,
+    output  [5:0] VGA_R,
+    output  [5:0] VGA_G,
+    output  [5:0] VGA_B,
     output        VGA_HS,
     output        VGA_VS,
 

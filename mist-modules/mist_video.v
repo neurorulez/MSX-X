@@ -83,9 +83,9 @@ module mist_video
     input wire       VSync,
 
     // MiST video output signals
-    output wire [4:0] VGA_R,
-    output wire [4:0] VGA_G,
-    output wire [4:0] VGA_B,
+    output wire [5:0] VGA_R,
+    output wire [5:0] VGA_G,
+    output wire [5:0] VGA_B,
     output wire      VGA_VS,
     output wire      VGA_HS,
     output wire osd_enable
@@ -247,16 +247,16 @@ cofi cofi (
     .blue_out( cofi_b  )
 );
 
-wire [5:0] vga_r_s = ( !hs || !vs ) ? 6'd0 : cofi_r;
-wire [5:0] vga_g_s = ( !hs || !vs ) ? 6'd0 : cofi_g;
-wire [5:0] vga_b_s = ( !hs || !vs ) ? 6'd0 : cofi_b;
+//wire [5:0] vga_r_s = ( !hs || !vs ) ? 6'd0 : cofi_r;
+//wire [5:0] vga_g_s = ( !hs || !vs ) ? 6'd0 : cofi_g;
+//wire [5:0] vga_b_s = ( !hs || !vs ) ? 6'd0 : cofi_b;
 wire       hs = cofi_hs;
 wire       vs = cofi_vs;
 
 
-assign VGA_R = vga_r_s[5:1];
-assign VGA_G = vga_g_s[5:1];
-assign VGA_B = vga_b_s[5:1];
+assign VGA_R = ( !hs || !vs ) ? 6'd0 : cofi_r;
+assign VGA_G = ( !hs || !vs ) ? 6'd0 : cofi_g;
+assign VGA_B = ( !hs || !vs ) ? 6'd0 : cofi_b;
 assign VGA_HS =  ( ~no_csync & scandoubler_disable ) ? ~(hs ^ vs) : hs;
 assign VGA_VS =  ( ~no_csync & scandoubler_disable ) ? 1'b1       : vs;
 
