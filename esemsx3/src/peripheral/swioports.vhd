@@ -173,7 +173,7 @@ begin
 
 --  =============================================================================================================
     DefKmap     <=  '1';                        -- Default Keyboard     0=Japanese Layout   1=Non-Japanese Layout
-    ZemmixNeo   <=  '0';                        -- Machine Type         0=1chipMSX          1=Zemmix Neo
+    ZemmixNeo   <=  '1';                        -- Machine Type         0=1chipMSX          1=Zemmix Neo
 --  =============================================================================================================
 
     process( reset, clk21m )
